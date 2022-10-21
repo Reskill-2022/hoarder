@@ -20,6 +20,10 @@ func NewSet() *Set {
 	}
 }
 
+func HealthCheck(c echo.Context) error {
+	return echoresponse.Format(c, "OK", nil, http.StatusOK)
+}
+
 func ErrorHandler(c echo.Context, err error) error {
 	var code int
 	var msg interface{}

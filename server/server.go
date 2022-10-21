@@ -25,6 +25,8 @@ func Start(ctx context.Context, cts *controllers.Set, port string) error {
 func bindRoutes(e *echo.Echo, cts *controllers.Set) {
 	v1 := e.Group("/v1")
 
+	v1.GET("/health", controllers.HealthCheck)
+
 	// slack :- /v1/slack
 	slack := v1.Group("/slack")
 	{
