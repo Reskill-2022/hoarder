@@ -16,13 +16,13 @@ import (
 // Start starts the HTTP server, binding routes to the appropriate handler.
 func Start(ctx context.Context, cts *controllers.Set, port string) error {
 	e := echo.New()
+
+	e.GET("/health", controllers.HealthCheck)
 	e.Use(
 		echoMiddleware.Recover(),
 		echoMiddleware.RequestID(),
-		middlewares.RequestLogger(log.FromContext(ctx)),
 	)
-
-	bindRoutes(e, cts)
+	bindRoutes(ctx, e, cts)
 
 	err := e.Start(addrFromPort(port))
 	if err != http.ErrServerClosed {
@@ -31,10 +31,9 @@ func Start(ctx context.Context, cts *controllers.Set, port string) error {
 	return nil
 }
 
-func bindRoutes(e *echo.Echo, cts *controllers.Set) {
+func bindRoutes(ctx context.Context, e *echo.Echo, cts *controllers.Set) {
 	v1 := e.Group("/v1")
-
-	v1.GET("/health", controllers.HealthCheck)
+	v1.Use(middlewares.RequestLogger(log.FromContext(ctx)))
 
 	// slack :- /v1/slack
 	slack := v1.Group("/slack")
