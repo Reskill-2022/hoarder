@@ -73,8 +73,12 @@ func (p *StaticProvider) Provide() map[string]interface{} {
 	return p.env
 }
 
-func GetEnv(key string) string {
-	return os.Getenv(key)
+func GetEnv(key, fallback string) string {
+	value, ok := os.LookupEnv(key)
+	if !ok {
+		return fallback
+	}
+	return value
 }
 
 func MustGetEnv(ctx context.Context, key string) string {

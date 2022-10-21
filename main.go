@@ -3,24 +3,33 @@ package main
 import (
 	"context"
 
+	"github.com/Reskill-2022/hoarder/config"
 	"github.com/Reskill-2022/hoarder/controllers"
+	"github.com/Reskill-2022/hoarder/env"
 	"github.com/Reskill-2022/hoarder/errors"
 	"github.com/Reskill-2022/hoarder/log"
 	"github.com/Reskill-2022/hoarder/server"
 	"github.com/Reskill-2022/hoarder/services"
 )
 
-const (
-	DefaultLogLevel = "debug"
-)
-
 func main() {
-	ctx := log.WithContext(context.Background(), log.New(DefaultLogLevel))
+	conf := config.New()
+	conf.AddFromProvider(environment())
+
+	ctx := context.Background()
+	ctx = log.WithContext(ctx, log.New(conf.GetString(env.ServiceLogLevel)))
 
 	svs := services.NewSet()
 	cts := controllers.NewSet(svs)
 
-	if err := server.Start(ctx, cts, "8001"); err != nil {
+	if err := server.Start(ctx, cts, conf.GetString(env.ServerPort)); err != nil {
 		log.FromContext(ctx).Named("main").Fatal("failed to start HTTP server", errors.ErrorLogFields(err)...)
 	}
+}
+
+func environment() config.Provider {
+	return config.NewStaticProvider(map[string]interface{}{
+		env.ServiceLogLevel: config.GetEnv(env.ServiceLogLevel, "INFO"),
+		env.ServerPort:      config.GetEnv(env.ServerPort, "8001"),
+	})
 }
