@@ -8,15 +8,16 @@ import (
 
 	"github.com/Reskill-2022/hoarder/errors"
 	"github.com/Reskill-2022/hoarder/log"
+	"github.com/Reskill-2022/hoarder/services"
 )
 
 type Set struct {
 	SlackController *SlackController
 }
 
-func NewSet() *Set {
+func NewSet(svs *services.Set) *Set {
 	return &Set{
-		SlackController: NewSlackController(),
+		SlackController: NewSlackController(svs.SlackService),
 	}
 }
 
