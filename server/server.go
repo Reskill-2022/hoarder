@@ -6,13 +6,22 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	echoMiddleware "github.com/labstack/echo/v4/middleware"
 
 	"github.com/Reskill-2022/hoarder/controllers"
+	"github.com/Reskill-2022/hoarder/log"
+	"github.com/Reskill-2022/hoarder/middlewares"
 )
 
 // Start starts the HTTP server, binding routes to the appropriate handler.
 func Start(ctx context.Context, cts *controllers.Set, port string) error {
 	e := echo.New()
+	e.Use(
+		echoMiddleware.Recover(),
+		echoMiddleware.RequestID(),
+		middlewares.RequestLogger(log.FromContext(ctx)),
+	)
+
 	bindRoutes(e, cts)
 
 	err := e.Start(addrFromPort(port))

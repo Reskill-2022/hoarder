@@ -31,7 +31,7 @@ func (s *SlackController) AuthorizationChallenge() echo.HandlerFunc {
 			return ErrorHandler(c, err)
 		}
 
-		log.FromContext(ctx).Named("SlackController.AuthorizationChallenge").Debug("received challenge: " + requestBody.Challenge)
+		log.FromContext(ctx).Named("SlackController.AuthorizationChallenge").Info("received challenge: " + requestBody.Challenge)
 
 		return c.String(http.StatusOK, requestBody.Challenge)
 	}
@@ -59,7 +59,7 @@ func (s *SlackController) Events() echo.HandlerFunc {
 		c.Request().Body = ioutil.NopCloser(bytes.NewReader(bodyCpy))
 
 		// log event type
-		log.FromContext(ctx).Named("SlackController.Events").Debug("received event type: " + event.EventType)
+		log.FromContext(ctx).Named("SlackController.Events").Info("received event type: " + event.EventType)
 
 		// multiplex to appropriate handler
 		next := s.getEventHandler(event.EventType)

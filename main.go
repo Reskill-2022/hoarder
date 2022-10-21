@@ -9,8 +9,12 @@ import (
 	"github.com/Reskill-2022/hoarder/server"
 )
 
+const (
+	DefaultLogLevel = "debug"
+)
+
 func main() {
-	ctx := context.Background()
+	ctx := log.WithContext(context.Background(), log.New(DefaultLogLevel))
 
 	cts := controllers.NewSet()
 
