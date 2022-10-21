@@ -24,7 +24,7 @@ func (s *SlackController) Events() echo.HandlerFunc {
 		}
 
 		// log event type
-		log.FromContext(ctx).Named("SlackController.Events").Debug("received event type: " + event.EventType)
+		log.FromContext(ctx).Named("SlackController.Events").Info("received event type: " + event.EventType)
 
 		// todo: multiplex to appropriate handler
 

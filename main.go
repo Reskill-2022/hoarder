@@ -14,7 +14,7 @@ func main() {
 
 	cts := controllers.NewSet()
 
-	if err := server.Start(ctx, cts, "8000"); err != nil {
+	if err := server.Start(ctx, cts, "8001"); err != nil {
 		log.FromContext(ctx).Named("main").Fatal("failed to start HTTP server", errors.ErrorLogFields(err)...)
 	}
 }
