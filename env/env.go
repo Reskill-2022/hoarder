@@ -6,4 +6,6 @@ const (
 	ProjectID = "PROJECT_ID"
 
 	ServerPort = "SERVER_PORT"
+
+	BigQueryServiceAccount = "BIGQUERY_SERVICE_ACCOUNT"
 )

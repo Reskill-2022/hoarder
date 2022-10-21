@@ -8,6 +8,7 @@ import (
 	"github.com/Reskill-2022/hoarder/env"
 	"github.com/Reskill-2022/hoarder/errors"
 	"github.com/Reskill-2022/hoarder/log"
+	"github.com/Reskill-2022/hoarder/repositories"
 	"github.com/Reskill-2022/hoarder/server"
 	"github.com/Reskill-2022/hoarder/services"
 )
@@ -22,7 +23,12 @@ func main() {
 	svs := services.NewSet()
 	cts := controllers.NewSet(svs)
 
-	if err := server.Start(ctx, cts, conf.GetString(env.ServerPort)); err != nil {
+	rcs, err := repositories.NewSet(ctx, conf)
+	if err != nil {
+		log.FromContext(ctx).Named("main").Fatal("failed to create repositories set", errors.ErrorLogFields(err)...)
+	}
+
+	if err := server.Start(ctx, cts, rcs, conf.GetString(env.ServerPort)); err != nil {
 		log.FromContext(ctx).Named("main").Fatal("failed to start HTTP server", errors.ErrorLogFields(err)...)
 	}
 }
