@@ -1,4 +1,4 @@
-FROM golang:1.19-alpine
+FROM golang:1.19-alpine as builder
 
 RUN apk update && apk add --no-cache git bash
 
@@ -24,10 +24,14 @@ ENV GOPRIVATE=github.com/Reskill-2022
 RUN git config --global url."https://$GITHUB_USER:$GITHUB_TOKEN@github.com/".insteadOf "https://github.com/"
 RUN go get ./...
 ENV GO_ENV=production
-RUN go install github.com/cosmtrek/air@latest
+RUN go build -o hoarder_server
+
+## Run Stage
+FROM alpine:latest
+
+COPY --from=builder /hoarder/hoarder_server /hoarder_server
+
 
 EXPOSE 8001
-
-# Run the air command to start a live-reload server. Check .air.toml file for more details
-ENTRYPOINT ["air"]
+ENTRYPOINT ["/hoarder_server"]
 
