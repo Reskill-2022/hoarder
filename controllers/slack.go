@@ -40,6 +40,10 @@ func (s *SlackController) Message() echo.HandlerFunc {
 			// can't handle this, not a failure
 			return echoresponse.Format(c, "OK", nil, http.StatusOK)
 		}
+		if requestBody.Event.Text == "" {
+			// drop messages without text, not a failure
+			return echoresponse.Format(c, "OK", nil, http.StatusOK)
+		}
 
 		messageInput := services.ChannelMessageInput{
 			EventType:      requestBody.Event.Type,
