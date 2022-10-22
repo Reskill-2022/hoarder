@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 	"os"
 	"sync"
@@ -87,4 +88,19 @@ func MustGetEnv(ctx context.Context, key string) string {
 		log.FromContext(ctx).Named("config.MustGetEnv").Fatal(fmt.Sprintf("key '%s' not found in environment", key))
 	}
 	return value
+}
+
+func GetBase64EncodedEnv(key, fallback string) string {
+	value, ok := os.LookupEnv(key)
+	if !ok {
+		return fallback
+	}
+
+	// decode base64
+	base64Decoded, err := base64.StdEncoding.DecodeString(value)
+	if err != nil {
+		return fallback
+	}
+
+	return string(base64Decoded)
 }

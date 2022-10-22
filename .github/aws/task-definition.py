@@ -89,6 +89,10 @@ def create_task_definition():
                         "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "SERVICE_LOG_LEVEL"),
                         "name": "SERVICE_LOG_LEVEL"
                     },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_SERVICE_ACCOUNT"),
+                        "name": "BIGQUERY_SERVICE_ACCOUNT"
+                    },
                 ],
             }        
         ]

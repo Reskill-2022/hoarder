@@ -14,10 +14,11 @@ import (
 )
 
 func main() {
-	conf := config.New()
-	conf.AddFromProvider(environment())
-
 	ctx := context.Background()
+
+	conf := config.New()
+	conf.AddFromProvider(environment(ctx))
+
 	ctx = log.WithContext(ctx, log.New(conf.GetString(env.ServiceLogLevel)))
 
 	svs := services.NewSet()
@@ -33,9 +34,10 @@ func main() {
 	}
 }
 
-func environment() config.Provider {
+func environment(ctx context.Context) config.Provider {
 	return config.NewStaticProvider(map[string]interface{}{
-		env.ServiceLogLevel: config.GetEnv(env.ServiceLogLevel, "INFO"),
-		env.ServerPort:      config.GetEnv(env.ServerPort, "8001"),
+		env.ServiceLogLevel:        config.GetEnv(env.ServiceLogLevel, "INFO"),
+		env.ServerPort:             config.GetEnv(env.ServerPort, "8001"),
+		env.BigQueryServiceAccount: config.GetBase64EncodedEnv(env.BigQueryServiceAccount, ""),
 	})
 }
