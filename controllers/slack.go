@@ -20,15 +20,13 @@ import (
 const (
 	EventTypeURLVerification = "url_verification"
 	EventTypeEventCallback   = "event_callback"
-
-	EventCallbackTypeMessage = "message"
 )
 
 type SlackController struct {
 	service services.SlackServiceInterface
 }
 
-func (s *SlackController) Message(creator repositories.SlackMessageCreator) echo.HandlerFunc {
+func (s *SlackController) EventOccurred(creator repositories.SlackMessageCreator) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
@@ -37,12 +35,7 @@ func (s *SlackController) Message(creator repositories.SlackMessageCreator) echo
 			return ErrorHandler(c, err)
 		}
 
-		if requestBody.Event.Type != EventCallbackTypeMessage {
-			// can't handle this, not a failure
-			return echoresponse.Format(c, "OK", nil, http.StatusOK)
-		}
-
-		messageInput := services.ChannelMessageInput{
+		input := services.EventInput{
 			EventType:      requestBody.Event.Type,
 			Text:           requestBody.Event.Text,
 			Timestamp:      requestBody.Event.Timestamp,
@@ -53,7 +46,7 @@ func (s *SlackController) Message(creator repositories.SlackMessageCreator) echo
 			ChannelType:    requestBody.Event.ChannelType,
 			EventTimestamp: requestBody.EventTime,
 		}
-		if err := s.service.ChannelMessage(ctx, messageInput, creator); err != nil {
+		if err := s.service.EventOccurred(ctx, input, creator); err != nil {
 			return ErrorHandler(c, err)
 		}
 
@@ -72,7 +65,7 @@ func (s *SlackController) AuthorizationChallenge() echo.HandlerFunc {
 			return ErrorHandler(c, err)
 		}
 
-		log.FromContext(ctx).Named("SlackController.AuthorizationChallenge").Info("received challenge: " + requestBody.Challenge)
+		log.FromContext(ctx).Named("SlackController.AuthorizationChallenge").Debug("received challenge: " + requestBody.Challenge)
 
 		return c.String(http.StatusOK, requestBody.Challenge)
 	}
@@ -100,7 +93,7 @@ func (s *SlackController) Events(slackMessageCreator repositories.SlackMessageCr
 		c.Request().Body = ioutil.NopCloser(bytes.NewReader(bodyCpy))
 
 		// log event type
-		log.FromContext(ctx).Named("SlackController.Events").Info("received event type: " + event.EventType)
+		log.FromContext(ctx).Named("SlackController.Events").Debug("received event type: " + event.EventType)
 
 		// multiplex to appropriate handler
 		next := s.getEventHandler(event.EventType, slackMessageCreator)
@@ -121,7 +114,7 @@ func (s *SlackController) getEventHandler(eventType string,
 		return s.AuthorizationChallenge()
 
 	case EventTypeEventCallback:
-		return s.Message(slackMessageCreator)
+		return s.EventOccurred(slackMessageCreator)
 
 	default:
 		return nil

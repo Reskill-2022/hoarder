@@ -7,10 +7,14 @@ import (
 	"github.com/Reskill-2022/hoarder/repositories"
 )
 
+const (
+	EventTypeMessage = "message"
+)
+
 type SlackService struct{}
 
 type (
-	ChannelMessageInput struct {
+	EventInput struct {
 		EventType      string
 		Text           string
 		Timestamp      string
@@ -23,8 +27,13 @@ type (
 	}
 )
 
-func (s *SlackService) ChannelMessage(ctx context.Context, input ChannelMessageInput, creator repositories.SlackMessageCreator) error {
+func (s *SlackService) EventOccurred(ctx context.Context, input EventInput, creator repositories.SlackMessageCreator) error {
 	if input.Text == "" {
+		return nil
+	}
+
+	if input.EventType != EventTypeMessage {
+		// can only handle message events for now
 		return nil
 	}
 

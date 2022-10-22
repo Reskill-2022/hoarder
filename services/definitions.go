@@ -8,6 +8,6 @@ import (
 
 type (
 	SlackServiceInterface interface {
-		ChannelMessage(ctx context.Context, input ChannelMessageInput, creator repositories.SlackMessageCreator) error
+		EventOccurred(ctx context.Context, input EventInput, creator repositories.SlackMessageCreator) error
 	}
 )
