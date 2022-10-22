@@ -39,5 +39,7 @@ func environment(ctx context.Context) config.Provider {
 		env.ServiceLogLevel:        config.GetEnv(env.ServiceLogLevel, "INFO"),
 		env.ServerPort:             config.GetEnv(env.ServerPort, "8001"),
 		env.BigQueryServiceAccount: config.GetBase64EncodedEnv(env.BigQueryServiceAccount, ""),
+		env.BigQuerySlackDatasetID: config.MustGetEnv(ctx, env.BigQuerySlackDatasetID),
+		env.BigQuerySlackTableID:   config.MustGetEnv(ctx, env.BigQuerySlackTableID),
 	})
 }

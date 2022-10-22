@@ -14,7 +14,7 @@ type Set struct {
 func NewSet(ctx context.Context, conf config.Config) (*Set, error) {
 	var set Set
 
-	bq, err := NewBigQuery(ctx, conf.GetString(env.BigQueryServiceAccount))
+	bq, err := NewBigQuery(ctx, conf.GetString(env.BigQueryServiceAccount), conf)
 	if err != nil {
 		return nil, err
 	}

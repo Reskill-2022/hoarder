@@ -39,7 +39,7 @@ func bindRoutes(ctx context.Context, e *echo.Echo, cts *controllers.Set, rcs *re
 	// slack :- /v1/slack
 	slack := v1.Group("/slack")
 	{
-		slack.POST("/events", cts.SlackController.Events())
+		slack.POST("/events", cts.SlackController.Events(rcs.BigQuery))
 	}
 }
 
