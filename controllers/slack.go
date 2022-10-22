@@ -12,6 +12,7 @@ import (
 
 	"github.com/Reskill-2022/hoarder/errors"
 	"github.com/Reskill-2022/hoarder/log"
+	"github.com/Reskill-2022/hoarder/repositories"
 	"github.com/Reskill-2022/hoarder/requests"
 	"github.com/Reskill-2022/hoarder/services"
 )
@@ -19,15 +20,13 @@ import (
 const (
 	EventTypeURLVerification = "url_verification"
 	EventTypeEventCallback   = "event_callback"
-
-	EventCallbackTypeMessage = "message"
 )
 
 type SlackController struct {
 	service services.SlackServiceInterface
 }
 
-func (s *SlackController) Message() echo.HandlerFunc {
+func (s *SlackController) EventOccurred(creator repositories.SlackMessageCreator) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
@@ -36,16 +35,7 @@ func (s *SlackController) Message() echo.HandlerFunc {
 			return ErrorHandler(c, err)
 		}
 
-		if requestBody.Event.Type != EventCallbackTypeMessage {
-			// can't handle this, not a failure
-			return echoresponse.Format(c, "OK", nil, http.StatusOK)
-		}
-		if requestBody.Event.Text == "" {
-			// drop messages without text, not a failure
-			return echoresponse.Format(c, "OK", nil, http.StatusOK)
-		}
-
-		messageInput := services.ChannelMessageInput{
+		input := services.EventInput{
 			EventType:      requestBody.Event.Type,
 			Text:           requestBody.Event.Text,
 			Timestamp:      requestBody.Event.Timestamp,
@@ -56,7 +46,7 @@ func (s *SlackController) Message() echo.HandlerFunc {
 			ChannelType:    requestBody.Event.ChannelType,
 			EventTimestamp: requestBody.EventTime,
 		}
-		if err := s.service.ChannelMessage(ctx, messageInput); err != nil {
+		if err := s.service.EventOccurred(ctx, input, creator); err != nil {
 			return ErrorHandler(c, err)
 		}
 
@@ -75,7 +65,7 @@ func (s *SlackController) AuthorizationChallenge() echo.HandlerFunc {
 			return ErrorHandler(c, err)
 		}
 
-		log.FromContext(ctx).Named("SlackController.AuthorizationChallenge").Info("received challenge: " + requestBody.Challenge)
+		log.FromContext(ctx).Named("SlackController.AuthorizationChallenge").Debug("received challenge: " + requestBody.Challenge)
 
 		return c.String(http.StatusOK, requestBody.Challenge)
 	}
@@ -84,7 +74,7 @@ func (s *SlackController) AuthorizationChallenge() echo.HandlerFunc {
 // Events is the multiplexer for all Slack events.
 // It routes each event to the appropriate handler based on the event type.
 // Events is not a middleware in the traditional sense, but it is a handler that routes.
-func (s *SlackController) Events() echo.HandlerFunc {
+func (s *SlackController) Events(slackMessageCreator repositories.SlackMessageCreator) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
@@ -103,10 +93,10 @@ func (s *SlackController) Events() echo.HandlerFunc {
 		c.Request().Body = ioutil.NopCloser(bytes.NewReader(bodyCpy))
 
 		// log event type
-		log.FromContext(ctx).Named("SlackController.Events").Info("received event type: " + event.EventType)
+		log.FromContext(ctx).Named("SlackController.Events").Debug("received event type: " + event.EventType)
 
 		// multiplex to appropriate handler
-		next := s.getEventHandler(event.EventType)
+		next := s.getEventHandler(event.EventType, slackMessageCreator)
 		if next == nil {
 			return ErrorHandler(c, errors.New("no handler for event type", 500))
 		}
@@ -115,12 +105,17 @@ func (s *SlackController) Events() echo.HandlerFunc {
 }
 
 // getEventHandler returns the appropriate handler for the given event type.
-func (s *SlackController) getEventHandler(eventType string) echo.HandlerFunc {
+func (s *SlackController) getEventHandler(eventType string,
+	slackMessageCreator repositories.SlackMessageCreator,
+) echo.HandlerFunc {
+
 	switch strings.ToLower(eventType) {
 	case EventTypeURLVerification:
 		return s.AuthorizationChallenge()
+
 	case EventTypeEventCallback:
-		return s.Message()
+		return s.EventOccurred(slackMessageCreator)
+
 	default:
 		return nil
 	}

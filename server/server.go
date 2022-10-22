@@ -11,10 +11,11 @@ import (
 	"github.com/Reskill-2022/hoarder/controllers"
 	"github.com/Reskill-2022/hoarder/log"
 	"github.com/Reskill-2022/hoarder/middlewares"
+	"github.com/Reskill-2022/hoarder/repositories"
 )
 
 // Start starts the HTTP server, binding routes to the appropriate handler.
-func Start(ctx context.Context, cts *controllers.Set, port string) error {
+func Start(ctx context.Context, cts *controllers.Set, rcs *repositories.Set, port string) error {
 	e := echo.New()
 
 	e.GET("/health", controllers.HealthCheck)
@@ -22,7 +23,7 @@ func Start(ctx context.Context, cts *controllers.Set, port string) error {
 		echoMiddleware.Recover(),
 		echoMiddleware.RequestID(),
 	)
-	bindRoutes(ctx, e, cts)
+	bindRoutes(ctx, e, cts, rcs)
 
 	err := e.Start(addrFromPort(port))
 	if err != http.ErrServerClosed {
@@ -31,14 +32,14 @@ func Start(ctx context.Context, cts *controllers.Set, port string) error {
 	return nil
 }
 
-func bindRoutes(ctx context.Context, e *echo.Echo, cts *controllers.Set) {
+func bindRoutes(ctx context.Context, e *echo.Echo, cts *controllers.Set, rcs *repositories.Set) {
 	v1 := e.Group("/v1")
 	v1.Use(middlewares.RequestLogger(log.FromContext(ctx)))
 
 	// slack :- /v1/slack
 	slack := v1.Group("/slack")
 	{
-		slack.POST("/events", cts.SlackController.Events())
+		slack.POST("/events", cts.SlackController.Events(rcs.BigQuery))
 	}
 }
 

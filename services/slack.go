@@ -3,14 +3,18 @@ package services
 import (
 	"context"
 
-	"github.com/Reskill-2022/hoarder/log"
-	"go.uber.org/zap"
+	"github.com/Reskill-2022/hoarder/models"
+	"github.com/Reskill-2022/hoarder/repositories"
+)
+
+const (
+	EventTypeMessage = "message"
 )
 
 type SlackService struct{}
 
 type (
-	ChannelMessageInput struct {
+	EventInput struct {
 		EventType      string
 		Text           string
 		Timestamp      string
@@ -23,23 +27,28 @@ type (
 	}
 )
 
-func (s *SlackService) ChannelMessage(ctx context.Context, input ChannelMessageInput) error {
-	//todo: write to BigQuery
+func (s *SlackService) EventOccurred(ctx context.Context, input EventInput, creator repositories.SlackMessageCreator) error {
+	if input.Text == "" {
+		return nil
+	}
 
-	// log the input
-	log.FromContext(ctx).Named("SlackService.ChannelMessage").Info("input",
-		zap.String("EventType", input.EventType),
-		zap.String("Text", input.Text),
-		zap.String("Timestamp", input.Timestamp),
-		zap.String("ChannelID", input.ChannelID),
-		zap.String("EventID", input.EventID),
-		zap.String("TeamID", input.TeamID),
-		zap.String("UserID", input.UserID),
-		zap.String("ChannelType", input.ChannelType),
-		zap.Int64("EventTimestamp", input.EventTimestamp),
-	)
+	if input.EventType != EventTypeMessage {
+		// can only handle message events for now
+		return nil
+	}
 
-	return nil
+	slackMessage := models.SlackMessage{
+		EventID:        input.EventID,
+		EventType:      input.EventType,
+		Text:           input.Text,
+		UserID:         input.UserID,
+		ChannelID:      input.ChannelID,
+		ChannelType:    input.ChannelType,
+		TeamID:         input.TeamID,
+		Timestamp:      input.Timestamp,
+		EventTimestamp: input.EventTimestamp,
+	}
+	return creator.CreateSlackMessage(ctx, slackMessage)
 }
 
 func NewSlackService() *SlackService {

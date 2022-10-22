@@ -85,6 +85,22 @@ def create_task_definition():
                         "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "SERVER_PORT"),
                         "name": "SERVER_PORT"
                     },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "SERVICE_LOG_LEVEL"),
+                        "name": "SERVICE_LOG_LEVEL"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_SERVICE_ACCOUNT"),
+                        "name": "BIGQUERY_SERVICE_ACCOUNT"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_SLACK_DATASET_ID"),
+                        "name": "BIGQUERY_SLACK_DATASET_ID"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_SLACK_TABLE_ID"),
+                        "name": "BIGQUERY_SLACK_TABLE_ID"
+                    },
                 ],
             }        
         ]
