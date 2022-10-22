@@ -19,7 +19,7 @@ type BigQuery struct {
 func NewBigQuery(ctx context.Context, serviceAccountRaw string, conf config.Config) (*BigQuery, error) {
 	var bq BigQuery
 
-	client, err := bigquery.NewClient(ctx, "DetectProjectID", option.WithCredentialsJSON([]byte(serviceAccountRaw)))
+	client, err := bigquery.NewClient(ctx, bigquery.DetectProjectID, option.WithCredentialsJSON([]byte(serviceAccountRaw)))
 	if err != nil {
 		return nil, err
 	}
