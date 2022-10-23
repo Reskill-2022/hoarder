@@ -28,7 +28,7 @@ type (
 	}
 )
 
-func (z *ZendeskService) CreateTicket(ctx context.Context, input CreateTicketInput, creator repositories.ZendeskTicketCreator) error {
+func (z *ZendeskService) CreateTicket(ctx context.Context, input CreateTicketInput, creator repositories.ZendeskTicketCreator) (*models.ZendeskTicket, error) {
 
 	ticket := models.ZendeskTicket{
 		ID:            input.ID,
@@ -45,7 +45,11 @@ func (z *ZendeskService) CreateTicket(ctx context.Context, input CreateTicketInp
 		Assignee:      input.Assignee,
 		RequestedAt:   input.RequestedAt,
 	}
-	return creator.CreateZendeskTicket(ctx, ticket)
+	if err := creator.CreateZendeskTicket(ctx, ticket); err != nil {
+		return nil, err
+	}
+
+	return &ticket, nil
 }
 
 func NewZendeskService() *ZendeskService {

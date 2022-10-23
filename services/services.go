@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+
+	"github.com/Reskill-2022/hoarder/config"
 )
 
 type Set struct {
@@ -11,9 +13,9 @@ type Set struct {
 	ZendeskService *ZendeskService
 }
 
-func NewSet() *Set {
+func NewSet(conf config.Config) *Set {
 	return &Set{
-		SlackService:   NewSlackService(),
+		SlackService:   NewSlackService(conf),
 		ZendeskService: NewZendeskService(),
 	}
 }

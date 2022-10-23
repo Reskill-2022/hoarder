@@ -4,17 +4,28 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/labstack/echo/v4"
+
+	"github.com/Reskill-2022/hoarder/config"
+	"github.com/Reskill-2022/hoarder/env"
 	"github.com/Reskill-2022/hoarder/errors"
 	"github.com/Reskill-2022/hoarder/models"
 	"github.com/Reskill-2022/hoarder/repositories"
-	"github.com/labstack/echo/v4"
+)
+
+var (
+	ChannelBlacklist = []string{
+		"C047AC49K0F",
+	}
 )
 
 const (
 	EventTypeMessage = "message"
 )
 
-type SlackService struct{}
+type SlackService struct {
+	conf config.Config
+}
 
 type (
 	EventInput struct {
@@ -45,6 +56,13 @@ func (s *SlackService) EventOccurred(ctx context.Context, input EventInput, crea
 		return nil
 	}
 
+	for _, channelID := range ChannelBlacklist {
+		if input.ChannelID == channelID {
+			// ignore messages from blacklisted channels
+			return nil
+		}
+	}
+
 	slackMessage := models.SlackMessage{
 		EventID:     input.EventID,
 		EventType:   input.EventType,
@@ -67,16 +85,18 @@ func (s *SlackService) SendMessage(ctx context.Context, input SendMessageInput) 
 		return errors.New("text is required", 400)
 	}
 
-	endpoint := "https://slack.com/api/chat.postMessage"
 	payload := map[string]interface{}{
 		"channel": input.ChannelID,
 		"text":    input.Text,
 	}
-	resp, err := http.Post(endpoint, echo.MIMEApplicationJSON, JSONPayloadReader(payload))
+	req, err := http.NewRequest(http.MethodPost, "https://slack.com/api/chat.postMessage", JSONPayloadReader(payload))
+	req.Header.Set(echo.HeaderContentType, "application/json")
+	req.Header.Set(echo.HeaderAuthorization, "Bearer "+s.conf.GetString(env.SlackToken))
+
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return errors.From(err, "failed to send message to slack", 500)
 	}
-
 	if resp.StatusCode != http.StatusOK {
 		return errors.New("got non-200 response from slack", resp.StatusCode)
 	}
@@ -84,6 +104,8 @@ func (s *SlackService) SendMessage(ctx context.Context, input SendMessageInput) 
 	return nil
 }
 
-func NewSlackService() *SlackService {
-	return &SlackService{}
+func NewSlackService(conf config.Config) *SlackService {
+	return &SlackService{
+		conf: conf,
+	}
 }

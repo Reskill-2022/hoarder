@@ -12,10 +12,11 @@ import (
 	"github.com/Reskill-2022/hoarder/log"
 	"github.com/Reskill-2022/hoarder/middlewares"
 	"github.com/Reskill-2022/hoarder/repositories"
+	"github.com/Reskill-2022/hoarder/services"
 )
 
 // Start starts the HTTP server, binding routes to the appropriate handler.
-func Start(ctx context.Context, cts *controllers.Set, rcs *repositories.Set, port string) error {
+func Start(ctx context.Context, cts *controllers.Set, svs *services.Set, rcs *repositories.Set, port string) error {
 	e := echo.New()
 
 	e.GET("/health", controllers.HealthCheck)
@@ -23,7 +24,7 @@ func Start(ctx context.Context, cts *controllers.Set, rcs *repositories.Set, por
 		echoMiddleware.Recover(),
 		echoMiddleware.RequestID(),
 	)
-	bindRoutes(ctx, e, cts, rcs)
+	bindRoutes(ctx, e, cts, svs, rcs)
 
 	err := e.Start(addrFromPort(port))
 	if err != http.ErrServerClosed {
@@ -32,7 +33,7 @@ func Start(ctx context.Context, cts *controllers.Set, rcs *repositories.Set, por
 	return nil
 }
 
-func bindRoutes(ctx context.Context, e *echo.Echo, cts *controllers.Set, rcs *repositories.Set) {
+func bindRoutes(ctx context.Context, e *echo.Echo, cts *controllers.Set, svs *services.Set, rcs *repositories.Set) {
 	v1 := e.Group("/v1")
 	v1.Use(middlewares.RequestLogger(log.FromContext(ctx)))
 
@@ -45,7 +46,7 @@ func bindRoutes(ctx context.Context, e *echo.Echo, cts *controllers.Set, rcs *re
 	// zendesk :- /v1/zendesk
 	zendesk := v1.Group("/zendesk")
 	{
-		zendesk.POST("/tickets", cts.ZendeskController.CreateTicket(rcs.BigQuery))
+		zendesk.POST("/tickets", cts.ZendeskController.CreateTicket(rcs.BigQuery, svs.SlackService))
 	}
 }
 

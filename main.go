@@ -21,7 +21,7 @@ func main() {
 
 	ctx = log.WithContext(ctx, log.New(conf.GetString(env.ServiceLogLevel)))
 
-	svs := services.NewSet()
+	svs := services.NewSet(conf)
 	cts := controllers.NewSet(svs)
 
 	rcs, err := repositories.NewSet(ctx, conf)
@@ -29,7 +29,7 @@ func main() {
 		log.FromContext(ctx).Named("main").Fatal("failed to create repositories set", errors.ErrorLogFields(err)...)
 	}
 
-	if err := server.Start(ctx, cts, rcs, conf.GetString(env.ServerPort)); err != nil {
+	if err := server.Start(ctx, cts, svs, rcs, conf.GetString(env.ServerPort)); err != nil {
 		log.FromContext(ctx).Named("main").Fatal("failed to start HTTP server", errors.ErrorLogFields(err)...)
 	}
 }

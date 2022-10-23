@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 
+	"github.com/Reskill-2022/hoarder/models"
 	"github.com/Reskill-2022/hoarder/repositories"
 )
 
@@ -17,6 +18,6 @@ type (
 	}
 
 	ZendeskServiceInterface interface {
-		CreateTicket(ctx context.Context, input CreateTicketInput, creator repositories.ZendeskTicketCreator) error
+		CreateTicket(ctx context.Context, input CreateTicketInput, creator repositories.ZendeskTicketCreator) (*models.ZendeskTicket, error)
 	}
 )
