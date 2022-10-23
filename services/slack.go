@@ -38,15 +38,15 @@ func (s *SlackService) EventOccurred(ctx context.Context, input EventInput, crea
 	}
 
 	slackMessage := models.SlackMessage{
-		EventID:        input.EventID,
-		EventType:      input.EventType,
-		Text:           input.Text,
-		UserID:         input.UserID,
-		ChannelID:      input.ChannelID,
-		ChannelType:    input.ChannelType,
-		TeamID:         input.TeamID,
-		Timestamp:      input.Timestamp,
-		EventTimestamp: input.EventTimestamp,
+		EventID:     input.EventID,
+		EventType:   input.EventType,
+		Text:        input.Text,
+		UserID:      input.UserID,
+		ChannelID:   input.ChannelID,
+		ChannelType: input.ChannelType,
+		TeamID:      input.TeamID,
+		Timestamp:   input.Timestamp,
+		EventTime:   input.EventTimestamp,
 	}
 	return creator.CreateSlackMessage(ctx, slackMessage)
 }
