@@ -10,4 +10,6 @@ const (
 	BigQuerySlackTableID     = "BIGQUERY_SLACK_TABLE_ID"
 	BigQueryZendeskDatasetID = "BIGQUERY_ZENDESK_DATASET_ID"
 	BigQueryZendeskTableID   = "BIGQUERY_ZENDESK_TABLE_ID"
+
+	SlackToken = "SLACK_TOKEN"
 )

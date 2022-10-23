@@ -43,5 +43,6 @@ func environment(ctx context.Context) config.Provider {
 		env.BigQuerySlackTableID:     config.MustGetEnv(ctx, env.BigQuerySlackTableID),
 		env.BigQueryZendeskDatasetID: config.MustGetEnv(ctx, env.BigQueryZendeskDatasetID),
 		env.BigQueryZendeskTableID:   config.MustGetEnv(ctx, env.BigQueryZendeskTableID),
+		env.SlackToken:               config.MustGetEnv(ctx, env.SlackToken),
 	})
 }
