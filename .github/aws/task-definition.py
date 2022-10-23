@@ -101,6 +101,14 @@ def create_task_definition():
                         "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_SLACK_TABLE_ID"),
                         "name": "BIGQUERY_SLACK_TABLE_ID"
                     },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_ZENDESK_DATASET_ID"),
+                        "name": "BIGQUERY_ZENDESK_DATASET_ID"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_ZENDESK_TABLE_ID"),
+                        "name": "BIGQUERY_ZENDESK_TABLE_ID"
+                    },
                 ],
             }        
         ]

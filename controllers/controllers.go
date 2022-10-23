@@ -19,7 +19,7 @@ type Set struct {
 func NewSet(svs *services.Set) *Set {
 	return &Set{
 		SlackController:   NewSlackController(svs.SlackService),
-		ZendeskController: NewZendeskController(),
+		ZendeskController: NewZendeskController(svs.ZendeskService),
 	}
 }
 

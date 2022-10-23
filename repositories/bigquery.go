@@ -35,3 +35,10 @@ func (bq *BigQuery) CreateSlackMessage(ctx context.Context, message models.Slack
 		Inserter()
 	return inserter.Put(ctx, message)
 }
+
+func (bq *BigQuery) CreateZendeskTicket(ctx context.Context, ticket models.ZendeskTicket) error {
+	inserter := bq.client.Dataset(bq.conf.GetString(env.BigQueryZendeskDatasetID)).
+		Table(bq.conf.GetString(env.BigQueryZendeskTableID)).
+		Inserter()
+	return inserter.Put(ctx, ticket)
+}

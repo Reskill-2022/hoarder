@@ -10,4 +10,8 @@ type (
 	SlackMessageCreator interface {
 		CreateSlackMessage(ctx context.Context, message models.SlackMessage) error
 	}
+
+	ZendeskTicketCreator interface {
+		CreateZendeskTicket(ctx context.Context, ticket models.ZendeskTicket) error
+	}
 )
