@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type (
 	SlackMessage struct {
 		EventID     string `json:"event_id" bigquery:"event_id"`
@@ -11,5 +13,21 @@ type (
 		TeamID      string `json:"team_id" bigquery:"team_id"`
 		Timestamp   string `json:"timestamp" bigquery:"timestamp"`
 		EventTime   int64  `json:"event_time" bigquery:"event_time"`
+	}
+
+	ZendeskTicket struct {
+		ID            int        `json:"id" bigquery:"id"`
+		Status        string     `json:"status" bigquery:"status"`
+		Satisfaction  string     `json:"satisfaction" bigquery:"satisfaction"`
+		Subject       string     `json:"subject" bigquery:"subject"`
+		Requester     string     `json:"requester" bigquery:"requester"`
+		RequestedAt   *time.Time `json:"requested_at" bigquery:"requested"`
+		Assignee      string     `json:"assignee" bigquery:"assignee"`
+		TicketType    string     `json:"type" bigquery:"type"`
+		Description   string     `json:"description" bigquery:"description"`
+		Link          string     `json:"link" bigquery:"link"`
+		Via           string     `json:"via" bigquery:"via"`
+		Priority      string     `json:"priority" bigquery:"priority"`
+		LatestComment string     `json:"latest_comment" bigquery:"latest_comment"`
 	}
 )

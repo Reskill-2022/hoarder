@@ -24,4 +24,21 @@ type (
 		EventTime int64  `json:"event_time"`
 		TeamID    string `json:"team_id"`
 	}
+
+	ZendeskTicketCreateRequest struct {
+		ID               string `json:"id"`
+		TicketType       string `json:"type"`
+		Title            string `json:"title"`
+		DescriptionPlain string `json:"description_plain"`
+		Link             string `json:"link"`
+		Via              string `json:"via"`
+		Status           string `json:"status"`
+		Priority         string `json:"priority"`
+		LatestComment    string `json:"latest_comment"`
+		Requester        string `json:"requester"`
+		RequesterEmail   string `json:"requester_email"`
+		Satisfaction     string `json:"satisfaction"`
+		Assignee         string `json:"assignee"`
+		Requested        string `json:"requested"`
+	}
 )

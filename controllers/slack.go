@@ -32,7 +32,7 @@ func (s *SlackController) EventOccurred(creator repositories.SlackMessageCreator
 
 		var requestBody requests.SlackEventCallback
 		if err := c.Bind(&requestBody); err != nil {
-			return ErrorHandler(c, err)
+			return echoresponse.Format(c, "malformed request body", nil, http.StatusBadRequest)
 		}
 
 		input := services.EventInput{
@@ -62,7 +62,7 @@ func (s *SlackController) AuthorizationChallenge() echo.HandlerFunc {
 
 		var requestBody requests.SlackChallengeRequest
 		if err := c.Bind(&requestBody); err != nil {
-			return ErrorHandler(c, err)
+			return echoresponse.Format(c, "malformed request body", nil, http.StatusBadRequest)
 		}
 
 		log.FromContext(ctx).Named("SlackController.AuthorizationChallenge").Debug("received challenge: " + requestBody.Challenge)

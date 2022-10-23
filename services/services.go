@@ -1,11 +1,13 @@
 package services
 
 type Set struct {
-	SlackService *SlackService
+	SlackService   *SlackService
+	ZendeskService *ZendeskService
 }
 
 func NewSet() *Set {
 	return &Set{
-		SlackService: NewSlackService(),
+		SlackService:   NewSlackService(),
+		ZendeskService: NewZendeskService(),
 	}
 }
