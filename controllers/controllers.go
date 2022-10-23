@@ -12,12 +12,14 @@ import (
 )
 
 type Set struct {
-	SlackController *SlackController
+	SlackController   *SlackController
+	ZendeskController *ZendeskController
 }
 
 func NewSet(svs *services.Set) *Set {
 	return &Set{
-		SlackController: NewSlackController(svs.SlackService),
+		SlackController:   NewSlackController(svs.SlackService),
+		ZendeskController: NewZendeskController(),
 	}
 }
 
