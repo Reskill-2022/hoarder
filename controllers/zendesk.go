@@ -59,5 +59,7 @@ func (z *ZendeskController) CreateTicket(ticketCreator repositories.ZendeskTicke
 }
 
 func NewZendeskController(service services.ZendeskServiceInterface) *ZendeskController {
-	return &ZendeskController{}
+	return &ZendeskController{
+		service: service,
+	}
 }
