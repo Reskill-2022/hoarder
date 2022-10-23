@@ -36,10 +36,12 @@ func main() {
 
 func environment(ctx context.Context) config.Provider {
 	return config.NewStaticProvider(map[string]interface{}{
-		env.ServiceLogLevel:        config.GetEnv(env.ServiceLogLevel, "INFO"),
-		env.ServerPort:             config.GetEnv(env.ServerPort, "8001"),
-		env.BigQueryServiceAccount: config.GetBase64EncodedEnv(env.BigQueryServiceAccount, ""),
-		env.BigQuerySlackDatasetID: config.MustGetEnv(ctx, env.BigQuerySlackDatasetID),
-		env.BigQuerySlackTableID:   config.MustGetEnv(ctx, env.BigQuerySlackTableID),
+		env.ServiceLogLevel:          config.GetEnv(env.ServiceLogLevel, "INFO"),
+		env.ServerPort:               config.GetEnv(env.ServerPort, "8001"),
+		env.BigQueryServiceAccount:   config.GetBase64EncodedEnv(env.BigQueryServiceAccount, ""),
+		env.BigQuerySlackDatasetID:   config.MustGetEnv(ctx, env.BigQuerySlackDatasetID),
+		env.BigQuerySlackTableID:     config.MustGetEnv(ctx, env.BigQuerySlackTableID),
+		env.BigQueryZendeskDatasetID: config.MustGetEnv(ctx, env.BigQueryZendeskDatasetID),
+		env.BigQueryZendeskTableID:   config.MustGetEnv(ctx, env.BigQueryZendeskTableID),
 	})
 }
