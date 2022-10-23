@@ -7,8 +7,13 @@ import (
 )
 
 type (
+	SlackMessageSender interface {
+		SendMessage(ctx context.Context, input SendMessageInput) error
+	}
+
 	SlackServiceInterface interface {
 		EventOccurred(ctx context.Context, input EventInput, creator repositories.SlackMessageCreator) error
+		SlackMessageSender
 	}
 
 	ZendeskServiceInterface interface {
