@@ -16,18 +16,18 @@ type (
 	}
 
 	ZendeskTicket struct {
-		ID            int        `json:"id" bigquery:"id"`
-		Status        string     `json:"status" bigquery:"status"`
-		Satisfaction  string     `json:"satisfaction" bigquery:"satisfaction"`
-		Subject       string     `json:"subject" bigquery:"subject"`
-		Requester     string     `json:"requester" bigquery:"requester"`
-		RequestedAt   *time.Time `json:"requested_at" bigquery:"requested"`
-		Assignee      string     `json:"assignee" bigquery:"assignee"`
-		TicketType    string     `json:"type" bigquery:"type"`
-		Description   string     `json:"description" bigquery:"description"`
-		Link          string     `json:"link" bigquery:"link"`
-		Via           string     `json:"via" bigquery:"via"`
-		Priority      string     `json:"priority" bigquery:"priority"`
-		LatestComment string     `json:"latest_comment" bigquery:"latest_comment"`
+		ID            int       `json:"id" bigquery:"id"`
+		Status        string    `json:"status" bigquery:"status"`
+		Satisfaction  string    `json:"satisfaction" bigquery:"satisfaction"`
+		Subject       string    `json:"subject" bigquery:"subject"`
+		Requester     string    `json:"requester" bigquery:"requester"`
+		RequestedAt   time.Time `json:"requested_at" bigquery:"requested"`
+		Assignee      string    `json:"assignee" bigquery:"assignee"`
+		TicketType    string    `json:"type" bigquery:"type"`
+		Description   string    `json:"description" bigquery:"description"`
+		Link          string    `json:"link" bigquery:"link"`
+		Via           string    `json:"via" bigquery:"via"`
+		Priority      string    `json:"priority" bigquery:"priority"`
+		LatestComment string    `json:"latest_comment" bigquery:"latest_comment"`
 	}
 )

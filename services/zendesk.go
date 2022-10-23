@@ -43,7 +43,7 @@ func (z *ZendeskService) CreateTicket(ctx context.Context, input CreateTicketInp
 		Requester:     input.Requester,
 		Satisfaction:  input.Satisfaction,
 		Assignee:      input.Assignee,
-		RequestedAt:   &input.RequestedAt,
+		RequestedAt:   input.RequestedAt,
 	}
 	return creator.CreateZendeskTicket(ctx, ticket)
 }
