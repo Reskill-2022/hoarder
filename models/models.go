@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type (
 	SlackMessage struct {
@@ -31,3 +34,17 @@ type (
 		LatestComment string    `json:"latest_comment" bigquery:"latest_comment"`
 	}
 )
+
+func (z ZendeskTicket) String() string {
+	return fmt.Sprintf(`
+New Zendesk Ticket #%d
+
+%s
+
+%s
+
+Requested By: %s
+
+%s
+	`, z.ID, z.Subject, z.Description, z.Requester, z.Link)
+}

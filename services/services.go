@@ -1,13 +1,31 @@
 package services
 
+import (
+	"bytes"
+	"encoding/json"
+	"io"
+
+	"github.com/Reskill-2022/hoarder/config"
+)
+
 type Set struct {
 	SlackService   *SlackService
 	ZendeskService *ZendeskService
 }
 
-func NewSet() *Set {
+func NewSet(conf config.Config) *Set {
 	return &Set{
-		SlackService:   NewSlackService(),
+		SlackService:   NewSlackService(conf),
 		ZendeskService: NewZendeskService(),
 	}
+}
+
+// JSONPayloadReader returns a JSON reader for the payload
+// It returns nil if marshalling fails
+func JSONPayloadReader(payload map[string]interface{}) io.Reader {
+	b, err := json.Marshal(payload)
+	if err != nil {
+		return nil
+	}
+	return bytes.NewReader(b)
 }

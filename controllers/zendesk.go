@@ -5,18 +5,25 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/jcobhams/echoresponse"
+	"github.com/labstack/echo/v4"
+
+	"github.com/Reskill-2022/hoarder/constants"
+	"github.com/Reskill-2022/hoarder/errors"
+	"github.com/Reskill-2022/hoarder/log"
 	"github.com/Reskill-2022/hoarder/repositories"
 	"github.com/Reskill-2022/hoarder/requests"
 	"github.com/Reskill-2022/hoarder/services"
-	"github.com/jcobhams/echoresponse"
-	"github.com/labstack/echo/v4"
 )
 
 type ZendeskController struct {
 	service services.ZendeskServiceInterface
 }
 
-func (z *ZendeskController) CreateTicket(ticketCreator repositories.ZendeskTicketCreator) echo.HandlerFunc {
+func (z *ZendeskController) CreateTicket(
+	ticketCreator repositories.ZendeskTicketCreator,
+	messenger services.SlackMessageSender,
+) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
@@ -50,8 +57,18 @@ func (z *ZendeskController) CreateTicket(ticketCreator repositories.ZendeskTicke
 			Assignee:      requestBody.Assignee,
 			RequestedAt:   requestedAt,
 		}
-		if err := z.service.CreateTicket(ctx, createInput, ticketCreator); err != nil {
+		ticket, err := z.service.CreateTicket(ctx, createInput, ticketCreator)
+		if err != nil {
 			return ErrorHandler(c, err)
+		}
+
+		// publish slack message for ticket
+		sendInput := services.SendMessageInput{
+			ChannelID: constants.SlackSupportSquadChannelID,
+			Text:      ticket.String(),
+		}
+		if err := messenger.SendMessage(ctx, sendInput); err != nil {
+			log.FromContext(ctx).Named("createTicket").Error("failed to send slack message", errors.ErrorLogFields(err)...)
 		}
 
 		return echoresponse.Format(c, "OK", nil, http.StatusOK)
