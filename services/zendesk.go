@@ -17,6 +17,8 @@ var blacklistRequesters = []string{
 	"feedback@slack.com",
 	"account-insights@mailchimp.com",
 	"survey@mailchimp.com",
+	"jobs-listings@linkedin.com",
+	"confirm@mailchimp.com"
 }
 
 type ZendeskService struct{}
