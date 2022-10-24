@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"strings"
 
 	"github.com/Reskill-2022/hoarder/config"
 )
@@ -28,4 +29,8 @@ func JSONPayloadReader(payload map[string]interface{}) io.Reader {
 		return nil
 	}
 	return bytes.NewReader(b)
+}
+
+func caselessEqual(a, b string) bool {
+	return strings.EqualFold(a, b)
 }
