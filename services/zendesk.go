@@ -2,11 +2,22 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"time"
 
+	"github.com/Reskill-2022/hoarder/errors"
+	"github.com/Reskill-2022/hoarder/log"
 	"github.com/Reskill-2022/hoarder/models"
 	"github.com/Reskill-2022/hoarder/repositories"
 )
+
+var blacklistRequesters = []string{
+	"info@twitter.com",
+	"noreply@mandrill.com",
+	"feedback@slack.com",
+	"account-insights@mailchimp.com",
+	"survey@mailchimp.com",
+}
 
 type ZendeskService struct{}
 
@@ -29,6 +40,12 @@ type (
 )
 
 func (z *ZendeskService) CreateTicket(ctx context.Context, input CreateTicketInput, creator repositories.ZendeskTicketCreator) (*models.ZendeskTicket, error) {
+	for _, requester := range blacklistRequesters {
+		if caselessEqual(requester, input.Requester) {
+			log.FromContext(ctx).Named("zendesk.createTicket").Debug(fmt.Sprintf("requester '%s' is blacklisted", input.Requester))
+			return nil, errors.New("requester is blacklisted", 400)
+		}
+	}
 
 	ticket := models.ZendeskTicket{
 		ID:            input.ID,
