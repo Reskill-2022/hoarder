@@ -22,6 +22,7 @@ var blacklistRequesters = []string{
 	"security@mail.instagram.com",
 	"notify@twitter.com",
 	"notifications-noreply@linkedin.com",
+	"invitations@linkedin.com",
 }
 
 type ZendeskService struct{}
