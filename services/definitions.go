@@ -10,6 +10,7 @@ import (
 type (
 	SlackMessageSender interface {
 		SendMessage(ctx context.Context, input SendMessageInput) error
+		SendTicketMessage(ctx context.Context, input TicketMessageInput) error
 	}
 
 	SlackServiceInterface interface {

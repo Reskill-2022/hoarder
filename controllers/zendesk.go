@@ -63,11 +63,11 @@ func (z *ZendeskController) CreateTicket(
 		}
 
 		// publish slack message for ticket
-		sendInput := services.SendMessageInput{
-			ChannelID: constants.SlackSupportSquadChannelID,
-			Text:      ticket.String(),
+		sendInput := services.TicketMessageInput{
+			ChannelID:    constants.SlackSupportSquadChannelID,
+			MarkdownText: ticket.MarkdownString(),
 		}
-		if err := messenger.SendMessage(ctx, sendInput); err != nil {
+		if err := messenger.SendTicketMessage(ctx, sendInput); err != nil {
 			log.FromContext(ctx).Named("createTicket").Error("failed to send slack message", errors.ErrorLogFields(err)...)
 		}
 
