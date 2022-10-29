@@ -44,6 +44,11 @@ type (
 		ChannelID string
 		Text      string
 	}
+
+	TicketMessageInput struct {
+		ChannelID    string
+		MarkdownText string
+	}
 )
 
 func (s *SlackService) EventOccurred(ctx context.Context, input EventInput, creator repositories.SlackMessageCreator) error {
@@ -75,6 +80,42 @@ func (s *SlackService) EventOccurred(ctx context.Context, input EventInput, crea
 		EventTime:   input.EventTimestamp,
 	}
 	return creator.CreateSlackMessage(ctx, slackMessage)
+}
+
+func (s *SlackService) SendTicketMessage(ctx context.Context, input TicketMessageInput) error {
+	if input.ChannelID == "" {
+		return errors.New("channel id is required", 400)
+	}
+	if input.MarkdownText == "" {
+		return errors.New("markdown text is required", 400)
+	}
+
+	payload := map[string]interface{}{
+		"channel": input.ChannelID,
+		"blocks": []map[string]interface{}{
+			{
+				"type": "section",
+				"text": map[string]interface{}{
+					"type": "mrkdwn",
+					"text": input.MarkdownText,
+				},
+			},
+		},
+	}
+
+	req, err := http.NewRequest(http.MethodPost, "https://slack.com/api/chat.postMessage", JSONPayloadReader(payload))
+	req.Header.Set(echo.HeaderContentType, "application/json")
+	req.Header.Set(echo.HeaderAuthorization, "Bearer "+s.conf.GetString(env.SlackToken))
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return errors.From(err, "failed to send message to slack", 500)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return errors.New("got non-200 response from slack", resp.StatusCode)
+	}
+
+	return nil
 }
 
 func (s *SlackService) SendMessage(ctx context.Context, input SendMessageInput) error {

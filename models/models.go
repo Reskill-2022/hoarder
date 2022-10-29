@@ -2,8 +2,11 @@ package models
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
+
+const TicketShortDescriptionLength = 1000
 
 type (
 	SlackMessage struct {
@@ -34,6 +37,19 @@ type (
 		LatestComment string    `json:"latest_comment" bigquery:"latest_comment"`
 	}
 )
+
+// ShortDescription returns the first TicketShortDescriptionLength characters of the description
+func (z ZendeskTicket) ShortDescription() string {
+	if len(z.Description) < TicketShortDescriptionLength {
+		return z.Description
+	}
+	return z.Description[:TicketShortDescriptionLength] + "..."
+}
+
+func (z ZendeskTicket) MarkdownString() string {
+	return fmt.Sprintf("> *Ticket ⌗%d*\n*Subject*: %s\n*Status: %s* \n\n```%s```\n\n*Requested By*: %s\n*<%s|View ticket on Zendesk>*",
+		z.ID, z.Subject, strings.ToUpper(z.Status), z.ShortDescription(), z.Requester, z.Link)
+}
 
 func (z ZendeskTicket) String() string {
 	return fmt.Sprintf(`
