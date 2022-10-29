@@ -67,6 +67,7 @@ func (z *ZendeskService) CreateTicket(ctx context.Context, input CreateTicketInp
 		Satisfaction:  input.Satisfaction,
 		Assignee:      input.Assignee,
 		RequestedAt:   input.RequestedAt,
+		CreatedAt:     time.Now().UTC(),
 	}
 	if err := creator.CreateZendeskTicket(ctx, ticket); err != nil {
 		return nil, err

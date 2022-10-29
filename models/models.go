@@ -35,6 +35,7 @@ type (
 		Via           string    `json:"via" bigquery:"via"`
 		Priority      string    `json:"priority" bigquery:"priority"`
 		LatestComment string    `json:"latest_comment" bigquery:"latest_comment"`
+		CreatedAt     time.Time `json:"created_at" bigquery:"created_at"`
 	}
 )
 
