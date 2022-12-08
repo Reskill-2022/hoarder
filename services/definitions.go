@@ -21,4 +21,6 @@ type (
 	ZendeskServiceInterface interface {
 		CreateTicket(ctx context.Context, input CreateTicketInput, creator repositories.ZendeskTicketCreator) (*models.ZendeskTicket, error)
 	}
+
+	CalendlyServiceInterface interface{}
 )

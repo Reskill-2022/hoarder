@@ -10,14 +10,16 @@ import (
 )
 
 type Set struct {
-	SlackService   *SlackService
-	ZendeskService *ZendeskService
+	SlackService    *SlackService
+	ZendeskService  *ZendeskService
+	CalendlyService *CalendlyService
 }
 
 func NewSet(conf config.Config) *Set {
 	return &Set{
-		SlackService:   NewSlackService(conf),
-		ZendeskService: NewZendeskService(),
+		SlackService:    NewSlackService(conf),
+		ZendeskService:  NewZendeskService(),
+		CalendlyService: NewCalendlyService(),
 	}
 }
 

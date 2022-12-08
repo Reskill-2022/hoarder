@@ -48,6 +48,11 @@ func bindRoutes(ctx context.Context, e *echo.Echo, cts *controllers.Set, svs *se
 	{
 		zendesk.POST("/tickets", cts.ZendeskController.CreateTicket(rcs.BigQuery, svs.SlackService))
 	}
+
+	calendly := v1.Group("/calendly")
+	{
+		calendly.POST("/events", cts.CalendlyController.Events(rcs.BigQuery))
+	}
 }
 
 func addrFromPort(port string) string {
