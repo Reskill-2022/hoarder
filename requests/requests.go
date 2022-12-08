@@ -41,4 +41,31 @@ type (
 		Assignee         string `json:"assignee"`
 		Requested        string `json:"requested"`
 	}
+
+	CalendlyEventRequest struct {
+		CreatedAt string `json:"created_at"`
+		CreatedBy string `json:"created_by"`
+		Event     string `json:"event"`
+		Payload   struct {
+			CancelURL           string `json:"cancel_url"`
+			CreatedAt           string `json:"created_at"`
+			Email               string `json:"email"`
+			Event               string `json:"event"`
+			Name                string `json:"name"`
+			NewInvitee          string `json:"new_invitee"`
+			OldInvitee          string `json:"old_invitee"`
+			QuestionsAndAnswers []struct {
+				Question string `json:"question"`
+				Answer   string `json:"answer"`
+			} `json:"questions_and_answers"`
+			RescheduleURL string `json:"reschedule_url"`
+			Rescheduled   bool   `json:"rescheduled"`
+			Status        string `json:"status"`
+			TextReminder  string `json:"text_reminder_number"`
+			Timezone      string `json:"timezone"`
+			UpdatedAt     string `json:"updated_at"`
+			URI           string `json:"uri"`
+			Canceled      bool   `json:"canceled"`
+		} `json:"payload"`
+	}
 )

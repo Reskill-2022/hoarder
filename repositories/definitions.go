@@ -14,4 +14,6 @@ type (
 	ZendeskTicketCreator interface {
 		CreateZendeskTicket(ctx context.Context, ticket models.ZendeskTicket) error
 	}
+
+	CalendlyEventCreator interface{}
 )
