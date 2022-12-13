@@ -113,6 +113,22 @@ def create_task_definition():
                         "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "SLACK_TOKEN"),
                         "name": "SLACK_TOKEN"
                     },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "CALENDLY_MEMBER1_TOKEN"),
+                        "name": "CALENDLY_MEMBER1_TOKEN"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "CALENDLY_MEMBER2_TOKEN"),
+                        "name": "CALENDLY_MEMBER2_TOKEN"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_CALENDLY_DATASET_ID"),
+                        "name": "BIGQUERY_CALENDLY_DATASET_ID"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_CALENDLY_TABLE_ID"),
+                        "name": "BIGQUERY_CALENDLY_TABLE_ID"
+                    },
                 ],
             }        
         ]
