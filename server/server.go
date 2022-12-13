@@ -51,7 +51,7 @@ func bindRoutes(ctx context.Context, e *echo.Echo, cts *controllers.Set, svs *se
 
 	calendly := v1.Group("/calendly")
 	{
-		calendly.POST("/events", cts.CalendlyController.Events(rcs.BigQuery))
+		calendly.POST("/events/:memberId", cts.CalendlyController.Events(rcs.BigQuery))
 	}
 }
 

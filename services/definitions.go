@@ -22,5 +22,7 @@ type (
 		CreateTicket(ctx context.Context, input CreateTicketInput, creator repositories.ZendeskTicketCreator) (*models.ZendeskTicket, error)
 	}
 
-	CalendlyServiceInterface interface{}
+	CalendlyServiceInterface interface {
+		// ResolveScheduledEvent(ctx context.Context, eventUUID string)
+	}
 )
