@@ -23,6 +23,6 @@ type (
 	}
 
 	CalendlyServiceInterface interface {
-		// ResolveScheduledEvent(ctx context.Context, eventUUID string)
+		ResolveScheduledEvent(ctx context.Context, memberId, eventURI string) (*models.CalendlyEvent, error)
 	}
 )

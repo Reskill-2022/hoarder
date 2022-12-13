@@ -44,5 +44,7 @@ func environment(ctx context.Context) config.Provider {
 		env.BigQueryZendeskDatasetID: config.MustGetEnv(ctx, env.BigQueryZendeskDatasetID),
 		env.BigQueryZendeskTableID:   config.MustGetEnv(ctx, env.BigQueryZendeskTableID),
 		env.SlackToken:               config.MustGetEnv(ctx, env.SlackToken),
+		env.CalendlyMember1Token:     config.MustGetEnv(ctx, env.CalendlyMember1Token),
+		env.CalendlyMember2Token:     config.MustGetEnv(ctx, env.CalendlyMember2Token),
 	})
 }

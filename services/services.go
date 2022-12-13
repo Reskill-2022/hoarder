@@ -19,7 +19,7 @@ func NewSet(conf config.Config) *Set {
 	return &Set{
 		SlackService:    NewSlackService(conf),
 		ZendeskService:  NewZendeskService(),
-		CalendlyService: NewCalendlyService(),
+		CalendlyService: NewCalendlyService(conf),
 	}
 }
 

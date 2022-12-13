@@ -12,4 +12,7 @@ const (
 	BigQueryZendeskTableID   = "BIGQUERY_ZENDESK_TABLE_ID"
 
 	SlackToken = "SLACK_TOKEN"
+
+	CalendlyMember1Token = "CALENDLY_MEMBER1_TOKEN"
+	CalendlyMember2Token = "CALENDLY_MEMBER2_TOKEN"
 )
