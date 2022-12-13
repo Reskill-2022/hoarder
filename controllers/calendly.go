@@ -19,6 +19,7 @@ type CalendlyController struct {
 func (c *CalendlyController) Events(creator repositories.CalendlyEventCreator) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var request requests.CalendlyEventRequest
+		fmt.Printf("request: %+v", request)
 		if err := c.Bind(&request); err != nil {
 			return echoresponse.Format(c, "malformed request body", nil, http.StatusBadRequest)
 		}
