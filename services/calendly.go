@@ -42,12 +42,14 @@ type (
 	}
 
 	CalendlyScheduledEvent struct {
-		URI       string    `json:"uri"`
-		Name      string    `json:"name"`
-		CreatedAt time.Time `json:"created_at"`
-		UpdatedAt time.Time `json:"updated_at"`
-		StartTime time.Time `json:"start_time"`
-		EndTime   time.Time `json:"end_time"`
+		Resource struct {
+			URI       string    `json:"uri"`
+			Name      string    `json:"name"`
+			CreatedAt time.Time `json:"created_at"`
+			UpdatedAt time.Time `json:"updated_at"`
+			StartTime time.Time `json:"start_time"`
+			EndTime   time.Time `json:"end_time"`
+		}
 	}
 )
 
@@ -107,6 +109,7 @@ func (c *CalendlyService) ResolveScheduledEvent(ctx context.Context, memberId, e
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", authorizationToken))
+	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {

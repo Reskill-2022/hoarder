@@ -35,12 +35,12 @@ func (c *CalendlyController) Events(service services.CalendlyServiceInterface, c
 			InviteeEmail: requestBody.Payload.Email,
 			InviteeName:  requestBody.Payload.Name,
 			CreatedBy:    requestBody.CreatedBy,
-			EventURI:     scheduledEvent.URI,
-			EventName:    scheduledEvent.Name,
-			CreatedAt:    scheduledEvent.CreatedAt,
-			UpdatedAt:    scheduledEvent.UpdatedAt,
-			StartTime:    scheduledEvent.StartTime,
-			EndTime:      scheduledEvent.EndTime,
+			EventURI:     scheduledEvent.Resource.URI,
+			EventName:    scheduledEvent.Resource.Name,
+			CreatedAt:    scheduledEvent.Resource.CreatedAt,
+			UpdatedAt:    scheduledEvent.Resource.UpdatedAt,
+			StartTime:    scheduledEvent.Resource.StartTime,
+			EndTime:      scheduledEvent.Resource.EndTime,
 		}
 		err = service.EventOccurred(ctx, input, creator)
 		if err != nil {
