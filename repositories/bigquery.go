@@ -42,3 +42,10 @@ func (bq *BigQuery) CreateZendeskTicket(ctx context.Context, ticket models.Zende
 		Inserter()
 	return inserter.Put(ctx, ticket)
 }
+
+func (bq *BigQuery) CreateCalendlyEvent(ctx context.Context, event models.CalendlyEvent) error {
+	inserter := bq.client.Dataset(bq.conf.GetString(env.BigQueryCalendlyDatasetID)).
+		Table(bq.conf.GetString(env.BigQueryCalendlyTableID)).
+		Inserter()
+	return inserter.Put(ctx, event)
+}

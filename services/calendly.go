@@ -5,25 +5,80 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/Reskill-2022/hoarder/config"
 	"github.com/Reskill-2022/hoarder/constants"
 	"github.com/Reskill-2022/hoarder/env"
 	"github.com/Reskill-2022/hoarder/errors"
 	"github.com/Reskill-2022/hoarder/models"
+	"github.com/Reskill-2022/hoarder/repositories"
 	"github.com/google/uuid"
 )
 
 const (
 	CalendlyScheduledEventsURLFmt = "https://api.calendly.com/scheduled_events/%s"
+
+	CalendlyEventStatusCreated  = "CREATED"
+	CalendlyEventStatusCanceled = "CANCELED"
 )
 
-type CalendlyService struct {
-	conf config.Config
+type (
+	CalendlyService struct {
+		conf config.Config
+	}
+
+	CalendlyEventInput struct {
+		EventURI     string
+		EventKind    string
+		EventName    string
+		InviteeEmail string
+		InviteeName  string
+		CreatedBy    string
+		CreatedAt    time.Time
+		UpdatedAt    time.Time
+		StartTime    time.Time
+		EndTime      time.Time
+	}
+
+	CalendlyScheduledEvent struct {
+		URI       string    `json:"uri"`
+		Name      string    `json:"name"`
+		CreatedAt time.Time `json:"created_at"`
+		UpdatedAt time.Time `json:"updated_at"`
+		StartTime time.Time `json:"start_time"`
+		EndTime   time.Time `json:"end_time"`
+	}
+)
+
+func (c *CalendlyService) EventOccurred(ctx context.Context, input CalendlyEventInput, creator repositories.CalendlyEventCreator) error {
+	event := models.CalendlyEvent{
+		Name:         input.EventName,
+		EventURI:     input.EventURI,
+		EventKind:    input.EventKind,
+		InviteeEmail: cleanToLower(input.InviteeEmail),
+		InviteeName:  clean(input.InviteeName),
+		CreatedBy:    input.CreatedBy,
+		CreatedAt:    input.CreatedAt,
+		UpdatedAt:    input.UpdatedAt,
+		StartTime:    input.StartTime,
+		EndTime:      input.EndTime,
+	}
+
+	switch input.EventKind {
+	case "invitee.created":
+		event.Status = CalendlyEventStatusCreated
+	case "invitee.canceled":
+		event.Status = CalendlyEventStatusCanceled
+	default:
+		return errors.New(fmt.Sprintf("unknown event kind: '%s'", input.EventKind), 400)
+	}
+
+	return creator.CreateCalendlyEvent(ctx, event)
 }
 
 // ResolveScheduledEvent resolves a Calendly event by its UUID
-func (c *CalendlyService) ResolveScheduledEvent(ctx context.Context, memberId, eventURI string) (*models.CalendlyEvent, error) {
+func (c *CalendlyService) ResolveScheduledEvent(ctx context.Context, memberId, eventURI string) (*CalendlyScheduledEvent, error) {
 	if eventURI == "" {
 		return nil, errors.New("event URI is required", 400)
 	}
@@ -62,7 +117,7 @@ func (c *CalendlyService) ResolveScheduledEvent(ctx context.Context, memberId, e
 		return nil, errors.New(fmt.Sprintf("error resolving event, got status: '%d'", resp.StatusCode), 500)
 	}
 
-	var event models.CalendlyEvent
+	var event CalendlyScheduledEvent
 	if err := json.NewDecoder(resp.Body).Decode(&event); err != nil {
 		return nil, errors.New("error decoding response body", 500)
 	}

@@ -39,17 +39,17 @@ type (
 	}
 
 	CalendlyEvent struct {
-		ID          string    `json:"id" bigquery:"id"`
-		URI         string    `json:"uri" bigquery:"uri"`
-		Name        string    `json:"name" bigquery:"name"`
-		Status      string    `json:"status" bigquery:"status"`
-		CreatedAt   time.Time `json:"created_at" bigquery:"created_at"`
-		UpdatedAt   time.Time `json:"updated_at" bigquery:"updated_at"`
-		StartTime   time.Time `json:"start_time" bigquery:"start_time"`
-		EndTime     time.Time `json:"end_time" bigquery:"end_time"`
-		EventGuests []struct {
-			Email string `json:"email" bigquery:"email"`
-		} `json:"event_guests" bigquery:"event_guests"`
+		Name         string    `json:"name" bigquery:"name"`
+		Status       string    `json:"status" bigquery:"status"`
+		EventURI     string    `json:"event_uri" bigquery:"event_uri"`
+		EventKind    string    `json:"event_kind" bigquery:"event_kind"`
+		InviteeEmail string    `json:"invitee_email" bigquery:"invitee_email"`
+		InviteeName  string    `json:"invitee_name" bigquery:"invitee_name"`
+		CreatedBy    string    `json:"created_by" bigquery:"created_by"`
+		CreatedAt    time.Time `json:"created_at" bigquery:"created_at"`
+		UpdatedAt    time.Time `json:"updated_at" bigquery:"updated_at"`
+		StartTime    time.Time `json:"start_time" bigquery:"start_time"`
+		EndTime      time.Time `json:"end_time" bigquery:"end_time"`
 	}
 )
 

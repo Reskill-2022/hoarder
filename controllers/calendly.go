@@ -7,7 +7,6 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"github.com/Reskill-2022/hoarder/errors"
-	"github.com/Reskill-2022/hoarder/log"
 	"github.com/Reskill-2022/hoarder/repositories"
 	"github.com/Reskill-2022/hoarder/requests"
 	"github.com/Reskill-2022/hoarder/services"
@@ -21,16 +20,31 @@ func (c *CalendlyController) Events(service services.CalendlyServiceInterface, c
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
-		var request requests.CalendlyEventRequest
-		if err := c.Bind(&request); err != nil {
-			log.FromContext(ctx).Warn("malformed request body", errors.ErrorLogFields(err)...)
-			return echoresponse.Format(c, "malformed request body", nil, http.StatusBadRequest)
+		var requestBody requests.CalendlyEventRequest
+		if err := c.Bind(&requestBody); err != nil {
+			return ErrorHandler(c, errors.New("malformed request body", http.StatusBadRequest))
 		}
 
-		event, err := service.ResolveScheduledEvent(ctx, c.Param("memberId"), request.Event)
+		scheduledEvent, err := service.ResolveScheduledEvent(ctx, c.Param("memberId"), requestBody.Payload.Event)
 		if err != nil {
-			log.FromContext(ctx).Warn("failed to resolved scheduled event", errors.ErrorLogFields(err)...)
-			return echoresponse.Format(c, "failed to resolved scheduled event", nil, http.StatusInternalServerError)
+			return ErrorHandler(c, err)
+		}
+
+		input := services.CalendlyEventInput{
+			EventKind:    requestBody.EventKind,
+			InviteeEmail: requestBody.Payload.Email,
+			InviteeName:  requestBody.Payload.Name,
+			CreatedBy:    requestBody.CreatedBy,
+			EventURI:     scheduledEvent.URI,
+			EventName:    scheduledEvent.Name,
+			CreatedAt:    scheduledEvent.CreatedAt,
+			UpdatedAt:    scheduledEvent.UpdatedAt,
+			StartTime:    scheduledEvent.StartTime,
+			EndTime:      scheduledEvent.EndTime,
+		}
+		err = service.EventOccurred(ctx, input, creator)
+		if err != nil {
+			return ErrorHandler(c, err)
 		}
 
 		return echoresponse.Format(c, "OK", nil, http.StatusOK)
