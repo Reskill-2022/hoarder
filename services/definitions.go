@@ -26,4 +26,6 @@ type (
 		ResolveScheduledEvent(ctx context.Context, memberId, eventURI string) (*CalendlyScheduledEvent, error)
 		EventOccurred(ctx context.Context, input CalendlyEventInput, creator repositories.CalendlyEventCreator) error
 	}
+
+	MoodleServiceInterface interface{}
 )
