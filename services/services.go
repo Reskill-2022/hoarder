@@ -19,7 +19,7 @@ func NewSet(conf config.Config) *Set {
 	return &Set{
 		SlackService:    NewSlackService(conf),
 		ZendeskService:  NewZendeskService(),
-		CalendlyService: NewCalendlyService(),
+		CalendlyService: NewCalendlyService(conf),
 	}
 }
 
@@ -35,4 +35,12 @@ func JSONPayloadReader(payload map[string]interface{}) io.Reader {
 
 func caselessEqual(a, b string) bool {
 	return strings.EqualFold(a, b)
+}
+
+func cleanToLower(s string) string {
+	return strings.ToLower(strings.TrimSpace(s))
+}
+
+func clean(s string) string {
+	return strings.TrimSpace(s)
 }

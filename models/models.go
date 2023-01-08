@@ -37,6 +37,20 @@ type (
 		LatestComment string    `json:"latest_comment" bigquery:"latest_comment"`
 		CreatedAt     time.Time `json:"created_at" bigquery:"created_at"`
 	}
+
+	CalendlyEvent struct {
+		Name         string    `json:"name" bigquery:"name"`
+		Status       string    `json:"status" bigquery:"status"`
+		EventURI     string    `json:"event_uri" bigquery:"event_uri"`
+		EventKind    string    `json:"event_kind" bigquery:"event_kind"`
+		InviteeEmail string    `json:"invitee_email" bigquery:"invitee_email"`
+		InviteeName  string    `json:"invitee_name" bigquery:"invitee_name"`
+		CreatedBy    string    `json:"created_by" bigquery:"created_by"`
+		CreatedAt    time.Time `json:"created_at" bigquery:"created_at"`
+		UpdatedAt    time.Time `json:"updated_at" bigquery:"updated_at"`
+		StartTime    time.Time `json:"start_time" bigquery:"start_time"`
+		EndTime      time.Time `json:"end_time" bigquery:"end_time"`
+	}
 )
 
 // ShortDescription returns the first TicketShortDescriptionLength characters of the description

@@ -45,7 +45,7 @@ type (
 	CalendlyEventRequest struct {
 		CreatedAt string `json:"created_at"`
 		CreatedBy string `json:"created_by"`
-		Event     string `json:"event"`
+		EventKind string `json:"event"`
 		Payload   struct {
 			CancelURL           string `json:"cancel_url"`
 			CreatedAt           string `json:"created_at"`

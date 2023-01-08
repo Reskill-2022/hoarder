@@ -28,7 +28,7 @@ type SlackService struct {
 }
 
 type (
-	EventInput struct {
+	SlackEventInput struct {
 		EventType      string
 		Text           string
 		Timestamp      string
@@ -51,7 +51,7 @@ type (
 	}
 )
 
-func (s *SlackService) EventOccurred(ctx context.Context, input EventInput, creator repositories.SlackMessageCreator) error {
+func (s *SlackService) EventOccurred(ctx context.Context, input SlackEventInput, creator repositories.SlackMessageCreator) error {
 	if input.Text == "" {
 		return nil
 	}

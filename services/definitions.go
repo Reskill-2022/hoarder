@@ -14,7 +14,7 @@ type (
 	}
 
 	SlackServiceInterface interface {
-		EventOccurred(ctx context.Context, input EventInput, creator repositories.SlackMessageCreator) error
+		EventOccurred(ctx context.Context, input SlackEventInput, creator repositories.SlackMessageCreator) error
 		SlackMessageSender
 	}
 
@@ -22,5 +22,8 @@ type (
 		CreateTicket(ctx context.Context, input CreateTicketInput, creator repositories.ZendeskTicketCreator) (*models.ZendeskTicket, error)
 	}
 
-	CalendlyServiceInterface interface{}
+	CalendlyServiceInterface interface {
+		ResolveScheduledEvent(ctx context.Context, memberId, eventURI string) (*CalendlyScheduledEvent, error)
+		EventOccurred(ctx context.Context, input CalendlyEventInput, creator repositories.CalendlyEventCreator) error
+	}
 )

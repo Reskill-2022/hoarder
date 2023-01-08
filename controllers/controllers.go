@@ -47,6 +47,7 @@ func ErrorHandler(c echo.Context, err error) error {
 	}
 
 	if code > 0 && code < 500 {
+		log.FromContext(c.Request().Context()).Named("ErrorHandler").Warn(err.Error(), errors.ErrorLogFields(err)...)
 		return echoresponse.Format(c, msg, nil, code)
 	}
 

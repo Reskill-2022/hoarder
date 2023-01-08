@@ -35,7 +35,7 @@ func (s *SlackController) EventOccurred(creator repositories.SlackMessageCreator
 			return echoresponse.Format(c, "malformed request body", nil, http.StatusBadRequest)
 		}
 
-		input := services.EventInput{
+		input := services.SlackEventInput{
 			EventType:      requestBody.Event.Type,
 			Text:           requestBody.Event.Text,
 			Timestamp:      requestBody.Event.Timestamp,
