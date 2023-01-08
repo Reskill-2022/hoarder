@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'calendly-integration'
 
 env:
   SERVICE_NAME: hoarder-service
