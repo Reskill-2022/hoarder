@@ -51,6 +51,20 @@ type (
 		StartTime    time.Time `json:"start_time" bigquery:"start_time"`
 		EndTime      time.Time `json:"end_time" bigquery:"end_time"`
 	}
+
+	MoodleLogLine struct {
+		ID              int    `json:"id" bigquery:"id"`
+		EventName       string `json:"event_name" bigquery:"eventName"`
+		Component       string `json:"component" bigquery:"component"` // core, mod_page, ...
+		Action          string `json:"action" bigquery:"action"`       // viewed, updated, ...
+		Target          string `json:"target" bigquery:"target"`       // course, course_module_completion, dashboard, ...
+		ObjectTableName string `json:"object_table_name" bigquery:"objectTableName"`
+		ObjectID        int    `json:"object_id" bigquery:"objectId"`
+		UserID          int    `json:"user_id" bigquery:"userId"`
+		CourseID        int    `json:"course_id" bigquery:"courseId"`
+		TimeCreated     int    `json:"time_created" bigquery:"timeCreated"`
+		IPAddress       string `json:"ip_address" bigquery:"ipAddress"`
+	}
 )
 
 // ShortDescription returns the first TicketShortDescriptionLength characters of the description

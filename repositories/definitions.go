@@ -18,4 +18,7 @@ type (
 	CalendlyEventCreator interface {
 		CreateCalendlyEvent(ctx context.Context, event models.CalendlyEvent) error
 	}
+
+	MoodleRepositoryInterface interface {
+	}
 )
