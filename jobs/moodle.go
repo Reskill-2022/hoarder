@@ -17,14 +17,16 @@ type MoodleJobs struct {
 
 func (m *MoodleJobs) ExtractTransformLoadLogs(service services.MoodleServiceInterface, repo repositories.MoodleRepositoryInterface) cron.Job {
 	return func(ctx context.Context) error {
-		t := time.Now().UTC()
+
+		t := time.Now().UTC().Add(-10 * time.Second)
+		//todo: read last timestamp
 
 		logLines, err := service.ListLogs(ctx, &t, repo)
 		if err != nil {
-			panic(err)
+			return err
 		}
 
-		// list all log ids
+		//todo: write to bigquery
 		for _, line := range logLines {
 			fmt.Println(line.ID)
 		}
