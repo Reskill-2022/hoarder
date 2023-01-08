@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"time"
 
 	"github.com/Reskill-2022/hoarder/models"
 )
@@ -17,5 +18,17 @@ type (
 
 	CalendlyEventCreator interface {
 		CreateCalendlyEvent(ctx context.Context, event models.CalendlyEvent) error
+	}
+
+	MoodleLogLineCreator interface {
+		CreateMoodleLogLine(ctx context.Context, logLine models.MoodleLogLine) error
+	}
+
+	MoodleLogLineGetter interface {
+		GetLastMoodleLogLine(ctx context.Context) (*models.MoodleLogLine, error)
+	}
+
+	MoodleRepositoryInterface interface {
+		ListLogs(ctx context.Context, since *time.Time) ([]*models.MoodleLogLine, error)
 	}
 )

@@ -9,6 +9,7 @@ import (
 
 type Set struct {
 	BigQuery *BigQuery
+	MoodleDB *MoodleDB
 }
 
 func NewSet(ctx context.Context, conf config.Config) (*Set, error) {
@@ -19,6 +20,12 @@ func NewSet(ctx context.Context, conf config.Config) (*Set, error) {
 		return nil, err
 	}
 
+	mdb, err := NewMoodleDB(ctx, conf)
+	if err != nil {
+		return nil, err
+	}
+
 	set.BigQuery = bq
+	set.MoodleDB = mdb
 	return &set, nil
 }

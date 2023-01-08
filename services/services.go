@@ -13,6 +13,7 @@ type Set struct {
 	SlackService    *SlackService
 	ZendeskService  *ZendeskService
 	CalendlyService *CalendlyService
+	MoodleService   *MoodleService
 }
 
 func NewSet(conf config.Config) *Set {
@@ -20,6 +21,7 @@ func NewSet(conf config.Config) *Set {
 		SlackService:    NewSlackService(conf),
 		ZendeskService:  NewZendeskService(),
 		CalendlyService: NewCalendlyService(conf),
+		MoodleService:   NewMoodleService(conf),
 	}
 }
 

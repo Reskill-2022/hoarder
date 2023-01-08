@@ -51,6 +51,20 @@ type (
 		StartTime    time.Time `json:"start_time" bigquery:"start_time"`
 		EndTime      time.Time `json:"end_time" bigquery:"end_time"`
 	}
+
+	MoodleLogLine struct {
+		ID              int    `json:"id" bigquery:"id"`
+		EventName       string `json:"event_name" bigquery:"event_name" gorm:"column:eventname"`
+		Component       string `json:"component" bigquery:"component" gorm:"column:component"` // core, mod_page, ...
+		Action          string `json:"action" bigquery:"action" gorm:"column:action"`          // viewed, updated, ...
+		Target          string `json:"target" bigquery:"target" gorm:"column:target"`          // course, course_module_completion, dashboard, ...
+		ObjectTableName string `json:"object_table" bigquery:"object_table" gorm:"column:objecttable"`
+		ObjectID        int    `json:"object_id" bigquery:"object_id" gorm:"column:objectid"`
+		UserID          int    `json:"user_id" bigquery:"user_id" gorm:"column:userid"`
+		CourseID        int    `json:"course_id" bigquery:"course_id" gorm:"column:courseid"`
+		TimeCreated     int64  `json:"time_created" bigquery:"time_created" gorm:"column:timecreated"`
+		IPAddress       string `json:"ip_address" bigquery:"ip_address" gorm:"column:ip"`
+	}
 )
 
 // ShortDescription returns the first TicketShortDescriptionLength characters of the description
@@ -78,4 +92,8 @@ Requested By: %s
 
 %s
 	`, z.ID, z.Subject, z.Description, z.Requester, z.Link)
+}
+
+func (MoodleLogLine) TableName() string {
+	return "resk_logstore_standard_log"
 }
