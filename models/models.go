@@ -62,7 +62,7 @@ type (
 		ObjectID        int    `json:"object_id" bigquery:"object_id" gorm:"column:objectid"`
 		UserID          int    `json:"user_id" bigquery:"user_id" gorm:"column:userid"`
 		CourseID        int    `json:"course_id" bigquery:"course_id" gorm:"column:courseid"`
-		TimeCreated     int    `json:"time_created" bigquery:"time_created" gorm:"column:timecreated"`
+		TimeCreated     int64  `json:"time_created" bigquery:"time_created" gorm:"column:timecreated"`
 		IPAddress       string `json:"ip_address" bigquery:"ip_address" gorm:"column:ip"`
 	}
 )

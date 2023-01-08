@@ -6,6 +6,7 @@ import (
 
 	"github.com/Reskill-2022/hoarder/config"
 	"github.com/Reskill-2022/hoarder/cron"
+	"github.com/Reskill-2022/hoarder/errors"
 	"github.com/Reskill-2022/hoarder/repositories"
 	"github.com/Reskill-2022/hoarder/services"
 )
@@ -14,14 +15,21 @@ type MoodleJobs struct {
 	conf config.Config
 }
 
-func (m *MoodleJobs) ExtractTransformLoadLogs(service services.MoodleServiceInterface, repo repositories.MoodleRepositoryInterface, logLineCreator repositories.MoodleLogLineCreator) cron.Job {
+func (m *MoodleJobs) ExtractTransformLoadLogs(service services.MoodleServiceInterface,
+	repo repositories.MoodleRepositoryInterface,
+	logLineCreator repositories.MoodleLogLineCreator,
+	logLineGetter repositories.MoodleLogLineGetter,
+) cron.Job {
 	return func(ctx context.Context) error {
 
-		// last, err := service.ListLogs
-		t := time.Now().UTC().Add(-10 * time.Second)
-		//todo: read last timestamp
+		last, err := service.GetLatestLog(ctx, logLineGetter)
+		if err != nil {
+			return errors.From(err, "failed to get latest log line", 500)
+		}
 
-		logLines, err := service.ListLogs(ctx, &t, repo)
+		lastFetchTime := time.Unix(last.TimeCreated, 0)
+
+		logLines, err := service.ListLogs(ctx, &lastFetchTime, repo)
 		if err != nil {
 			return err
 		}

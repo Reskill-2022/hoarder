@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 
 	"cloud.google.com/go/bigquery"
 	"github.com/Reskill-2022/hoarder/config"
@@ -60,18 +61,14 @@ func (bq *BigQuery) CreateMoodleLogLine(ctx context.Context, line models.MoodleL
 
 // GetLastMoodleLogLine returns the last Moodle log line sorted by timecreated.
 func (bq *BigQuery) GetLastMoodleLogLine(ctx context.Context) (*models.MoodleLogLine, error) {
-	var line *models.MoodleLogLine
+	var line models.MoodleLogLine
 
-	query := bq.client.Query(`
-		SELECT
-			*
-		FROM
-			` + bq.conf.GetString(env.BigQueryProjectID) + `.` + bq.conf.GetString(env.BigQueryMoodleDatasetID) + `.` + bq.conf.GetString(env.BigQueryMoodleLogsTableID) + `
-		ORDER BY
-			timecreated DESC
-		LIMIT
-			1
-	`)
+	canonicalTableID := fmt.Sprintf("`%s.%s.%s`",
+		bq.conf.GetString(env.BigQueryProjectID),
+		bq.conf.GetString(env.BigQueryMoodleDatasetID),
+		bq.conf.GetString(env.BigQueryMoodleLogsTableID),
+	)
+	query := bq.client.Query("SELECT * FROM " + canonicalTableID + " ORDER BY time_created DESC LIMIT 1")
 
 	it, err := query.Read(ctx)
 	if err != nil {
@@ -88,5 +85,5 @@ func (bq *BigQuery) GetLastMoodleLogLine(ctx context.Context) (*models.MoodleLog
 		}
 	}
 
-	return line, nil
+	return &line, nil
 }

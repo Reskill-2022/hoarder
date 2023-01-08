@@ -13,7 +13,7 @@ import (
 func ScheduleJobs(ctx context.Context, jbs *jobs.Set, svs *services.Set, rcs *repositories.Set) error {
 	scheduler := cron.New()
 
-	scheduler.Schedule("moodle.logs.etl", "@every 10s", jbs.MoodleJobs.ExtractTransformLoadLogs(svs.MoodleService, rcs.MoodleDB, rcs.BigQuery))
+	scheduler.Schedule("moodle.logs.etl", "@every 10s", jbs.MoodleJobs.ExtractTransformLoadLogs(svs.MoodleService, rcs.MoodleDB, rcs.BigQuery, rcs.BigQuery))
 
 	return scheduler.Start(ctx)
 }
