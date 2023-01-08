@@ -54,16 +54,16 @@ type (
 
 	MoodleLogLine struct {
 		ID              int    `json:"id" bigquery:"id"`
-		EventName       string `json:"event_name" bigquery:"eventName"`
-		Component       string `json:"component" bigquery:"component"` // core, mod_page, ...
-		Action          string `json:"action" bigquery:"action"`       // viewed, updated, ...
-		Target          string `json:"target" bigquery:"target"`       // course, course_module_completion, dashboard, ...
-		ObjectTableName string `json:"object_table_name" bigquery:"objectTableName"`
-		ObjectID        int    `json:"object_id" bigquery:"objectId"`
-		UserID          int    `json:"user_id" bigquery:"userId"`
-		CourseID        int    `json:"course_id" bigquery:"courseId"`
-		TimeCreated     int    `json:"time_created" bigquery:"timeCreated"`
-		IPAddress       string `json:"ip_address" bigquery:"ipAddress"`
+		EventName       string `json:"event_name" bigquery:"event_name" gorm:"column:eventname"`
+		Component       string `json:"component" bigquery:"component" gorm:"column:component"` // core, mod_page, ...
+		Action          string `json:"action" bigquery:"action" gorm:"column:action"`          // viewed, updated, ...
+		Target          string `json:"target" bigquery:"target" gorm:"column:target"`          // course, course_module_completion, dashboard, ...
+		ObjectTableName string `json:"object_table" bigquery:"object_table" gorm:"column:objecttable"`
+		ObjectID        int    `json:"object_id" bigquery:"object_id" gorm:"column:objectid"`
+		UserID          int    `json:"user_id" bigquery:"user_id" gorm:"column:userid"`
+		CourseID        int    `json:"course_id" bigquery:"course_id" gorm:"column:courseid"`
+		TimeCreated     int    `json:"time_created" bigquery:"time_created" gorm:"column:timecreated"`
+		IPAddress       string `json:"ip_address" bigquery:"ip_address" gorm:"column:ip"`
 	}
 )
 

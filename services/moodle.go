@@ -23,6 +23,13 @@ func (m *MoodleService) ListLogs(ctx context.Context, since *time.Time, lister r
 	return lister.ListLogs(ctx, since)
 }
 
+func (m *MoodleService) CreateLogLine(ctx context.Context, line *models.MoodleLogLine, creator repositories.MoodleLogLineCreator) error {
+	if line == nil {
+		return errors.New("log line cannot be nil", 400)
+	}
+	return creator.CreateMoodleLogLine(ctx, *line)
+}
+
 func NewMoodleService(conf config.Config) *MoodleService {
 	return &MoodleService{
 		conf: conf,

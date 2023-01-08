@@ -49,3 +49,10 @@ func (bq *BigQuery) CreateCalendlyEvent(ctx context.Context, event models.Calend
 		Inserter()
 	return inserter.Put(ctx, event)
 }
+
+func (bq *BigQuery) CreateMoodleLogLine(ctx context.Context, line models.MoodleLogLine) error {
+	inserter := bq.client.Dataset(bq.conf.GetString(env.BigQueryMoodleDatasetID)).
+		Table(bq.conf.GetString(env.BigQueryMoodleLogsTableID)).
+		Inserter()
+	return inserter.Put(ctx, line)
+}

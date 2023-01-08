@@ -12,6 +12,8 @@ const (
 	BigQueryZendeskTableID    = "BIGQUERY_ZENDESK_TABLE_ID"
 	BigQueryCalendlyDatasetID = "BIGQUERY_CALENDLY_DATASET_ID"
 	BigQueryCalendlyTableID   = "BIGQUERY_CALENDLY_TABLE_ID"
+	BigQueryMoodleDatasetID   = "BIGQUERY_MOODLE_DATASET_ID"
+	BigQueryMoodleLogsTableID = "BIGQUERY_MOODLE_LOGS_TABLE_ID"
 
 	SlackToken = "SLACK_TOKEN"
 

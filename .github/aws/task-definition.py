@@ -149,6 +149,14 @@ def create_task_definition():
                         "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "MOODLE_DB_NAME"),
                         "name": "MOODLE_DB_NAME"
                     },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_MOODLE_DATASET_ID"),
+                        "name": "BIGQUERY_MOODLE_DATASET_ID"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_MOODLE_LOGS_TABLE_ID"),
+                        "name": "BIGQUERY_MOODLE_LOGS_TABLE_ID"
+                    },
                 ],
             }        
         ]

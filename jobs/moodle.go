@@ -2,7 +2,6 @@ package jobs
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/Reskill-2022/hoarder/config"
@@ -15,7 +14,7 @@ type MoodleJobs struct {
 	conf config.Config
 }
 
-func (m *MoodleJobs) ExtractTransformLoadLogs(service services.MoodleServiceInterface, repo repositories.MoodleRepositoryInterface) cron.Job {
+func (m *MoodleJobs) ExtractTransformLoadLogs(service services.MoodleServiceInterface, repo repositories.MoodleRepositoryInterface, logLineCreator repositories.MoodleLogLineCreator) cron.Job {
 	return func(ctx context.Context) error {
 
 		t := time.Now().UTC().Add(-10 * time.Second)
@@ -26,9 +25,11 @@ func (m *MoodleJobs) ExtractTransformLoadLogs(service services.MoodleServiceInte
 			return err
 		}
 
-		//todo: write to bigquery
 		for _, line := range logLines {
-			fmt.Println(line.ID)
+			err := service.CreateLogLine(ctx, line, logLineCreator)
+			if err != nil {
+				return err
+			}
 		}
 
 		return nil

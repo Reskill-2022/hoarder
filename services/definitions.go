@@ -30,5 +30,6 @@ type (
 
 	MoodleServiceInterface interface {
 		ListLogs(ctx context.Context, since *time.Time, lister repositories.MoodleRepositoryInterface) ([]*models.MoodleLogLine, error)
+		CreateLogLine(ctx context.Context, line *models.MoodleLogLine, creator repositories.MoodleLogLineCreator) error
 	}
 )
