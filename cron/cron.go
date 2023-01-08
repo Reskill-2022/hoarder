@@ -2,8 +2,11 @@ package cron
 
 import (
 	"context"
+	"fmt"
 	"sync"
 
+	"github.com/Reskill-2022/hoarder/errors"
+	"github.com/Reskill-2022/hoarder/log"
 	"github.com/robfig/cron/v3"
 )
 
@@ -18,6 +21,7 @@ type (
 	}
 
 	specJob struct {
+		name string
 		spec string
 		do   Job
 	}
@@ -35,11 +39,11 @@ func New() *Scheduler {
 // Specs can be @hourly, @daily, etc.
 // See https://pkg.go.dev/github.com/robfig/cron#hdr-Predefined_schedules for full Spec list.
 // It is safe to call this method concurrently.
-func (s *Scheduler) Schedule(spec string, do Job) *Scheduler {
+func (s *Scheduler) Schedule(name, spec string, do Job) *Scheduler {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	s.specJobs = append(s.specJobs, specJob{spec: spec, do: do})
+	s.specJobs = append(s.specJobs, specJob{name: name, spec: spec, do: do})
 	return s
 }
 
@@ -48,7 +52,11 @@ func (s *Scheduler) Schedule(spec string, do Job) *Scheduler {
 func (s *Scheduler) Start(ctx context.Context) error {
 	for _, specJob := range s.specJobs {
 		cmd := func() {
-			_ = specJob.do(ctx)
+			log.FromContext(ctx).Info(fmt.Sprintf("starting scheduled Job: '%s'", specJob.name))
+			if err := specJob.do(ctx); err != nil {
+				log.FromContext(ctx).Error("job failed with error", errors.ErrorLogFields(err)...)
+			}
+			log.FromContext(ctx).Info(fmt.Sprintf("finished scheduled Job: '%s'", specJob.name))
 		}
 
 		if _, err := s.cron.AddFunc(specJob.spec, cmd); err != nil {
