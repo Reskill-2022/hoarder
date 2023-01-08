@@ -93,3 +93,7 @@ Requested By: %s
 %s
 	`, z.ID, z.Subject, z.Description, z.Requester, z.Link)
 }
+
+func (MoodleLogLine) TableName() string {
+	return "resk_logstore_standard_log"
+}

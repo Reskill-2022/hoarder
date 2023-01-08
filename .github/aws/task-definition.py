@@ -129,6 +129,26 @@ def create_task_definition():
                         "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_CALENDLY_TABLE_ID"),
                         "name": "BIGQUERY_CALENDLY_TABLE_ID"
                     },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "MOODLE_DB_USER"),
+                        "name": "MOODLE_DB_USER"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "MOODLE_DB_PASSWORD"),
+                        "name": "MOODLE_DB_PASSWORD"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "MOODLE_DB_HOST"),
+                        "name": "MOODLE_DB_HOST"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "MOODLE_DB_PORT"),
+                        "name": "MOODLE_DB_PORT"
+                    },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "MOODLE_DB_NAME"),
+                        "name": "MOODLE_DB_NAME"
+                    },
                 ],
             }        
         ]

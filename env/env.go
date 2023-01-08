@@ -17,4 +17,10 @@ const (
 
 	CalendlyMember1Token = "CALENDLY_MEMBER1_TOKEN"
 	CalendlyMember2Token = "CALENDLY_MEMBER2_TOKEN"
+
+	MoodleDBUser     = "MOODLE_DB_USER"
+	MoodleDBPassword = "MOODLE_DB_PASSWORD"
+	MoodleDBHost     = "MOODLE_DB_HOST"
+	MoodleDBPort     = "MOODLE_DB_PORT"
+	MoodleDBName     = "MOODLE_DB_NAME"
 )

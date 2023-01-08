@@ -48,5 +48,10 @@ func environment(ctx context.Context) config.Provider {
 		env.SlackToken:                config.MustGetEnv(ctx, env.SlackToken),
 		env.CalendlyMember1Token:      config.MustGetEnv(ctx, env.CalendlyMember1Token),
 		env.CalendlyMember2Token:      config.MustGetEnv(ctx, env.CalendlyMember2Token),
+		env.MoodleDBUser:              config.MustGetEnv(ctx, env.MoodleDBUser),
+		env.MoodleDBPassword:          config.MustGetEnv(ctx, env.MoodleDBPassword),
+		env.MoodleDBHost:              config.MustGetEnv(ctx, env.MoodleDBHost),
+		env.MoodleDBPort:              config.MustGetEnv(ctx, env.MoodleDBPort),
+		env.MoodleDBName:              config.MustGetEnv(ctx, env.MoodleDBName),
 	})
 }
