@@ -17,6 +17,7 @@ type MoodleJobs struct {
 func (m *MoodleJobs) ExtractTransformLoadLogs(service services.MoodleServiceInterface, repo repositories.MoodleRepositoryInterface, logLineCreator repositories.MoodleLogLineCreator) cron.Job {
 	return func(ctx context.Context) error {
 
+		// last, err := service.ListLogs
 		t := time.Now().UTC().Add(-10 * time.Second)
 		//todo: read last timestamp
 

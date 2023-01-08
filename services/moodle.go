@@ -30,6 +30,10 @@ func (m *MoodleService) CreateLogLine(ctx context.Context, line *models.MoodleLo
 	return creator.CreateMoodleLogLine(ctx, *line)
 }
 
+func (m *MoodleService) GetLatestLog(ctx context.Context, getter repositories.MoodleLogLineGetter) (*models.MoodleLogLine, error) {
+	return getter.GetLastMoodleLogLine(ctx)
+}
+
 func NewMoodleService(conf config.Config) *MoodleService {
 	return &MoodleService{
 		conf: conf,

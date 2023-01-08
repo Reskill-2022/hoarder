@@ -24,6 +24,10 @@ type (
 		CreateMoodleLogLine(ctx context.Context, logLine models.MoodleLogLine) error
 	}
 
+	MoodleLogLineGetter interface {
+		GetLastMoodleLogLine(ctx context.Context) (*models.MoodleLogLine, error)
+	}
+
 	MoodleRepositoryInterface interface {
 		ListLogs(ctx context.Context, since *time.Time) ([]*models.MoodleLogLine, error)
 	}

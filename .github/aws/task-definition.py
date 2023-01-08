@@ -157,6 +157,10 @@ def create_task_definition():
                         "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_MOODLE_LOGS_TABLE_ID"),
                         "name": "BIGQUERY_MOODLE_LOGS_TABLE_ID"
                     },
+                    {
+                        "valueFrom": credentials_arn_base.format(secret_arn_base, env.ServiceName, credentials_arn_env, "BIGQUERY_PROJECT_ID"),
+                        "name": "BIGQUERY_PROJECT_ID"
+                    },
                 ],
             }        
         ]

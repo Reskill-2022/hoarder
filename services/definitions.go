@@ -31,5 +31,6 @@ type (
 	MoodleServiceInterface interface {
 		ListLogs(ctx context.Context, since *time.Time, lister repositories.MoodleRepositoryInterface) ([]*models.MoodleLogLine, error)
 		CreateLogLine(ctx context.Context, line *models.MoodleLogLine, creator repositories.MoodleLogLineCreator) error
+		GetLatestLog(ctx context.Context, getter repositories.MoodleLogLineGetter) (*models.MoodleLogLine, error)
 	}
 )

@@ -53,6 +53,7 @@ func environment(ctx context.Context) config.Provider {
 		env.BigQueryCalendlyTableID:   config.MustGetEnv(ctx, env.BigQueryCalendlyTableID),
 		env.BigQueryMoodleDatasetID:   config.MustGetEnv(ctx, env.BigQueryMoodleDatasetID),
 		env.BigQueryMoodleLogsTableID: config.MustGetEnv(ctx, env.BigQueryMoodleLogsTableID),
+		env.BigQueryProjectID:         config.MustGetEnv(ctx, env.BigQueryProjectID),
 		env.SlackToken:                config.MustGetEnv(ctx, env.SlackToken),
 		env.CalendlyMember1Token:      config.MustGetEnv(ctx, env.CalendlyMember1Token),
 		env.CalendlyMember2Token:      config.MustGetEnv(ctx, env.CalendlyMember2Token),
