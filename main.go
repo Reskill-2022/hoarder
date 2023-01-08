@@ -7,6 +7,7 @@ import (
 	"github.com/Reskill-2022/hoarder/controllers"
 	"github.com/Reskill-2022/hoarder/env"
 	"github.com/Reskill-2022/hoarder/errors"
+	"github.com/Reskill-2022/hoarder/jobs"
 	"github.com/Reskill-2022/hoarder/log"
 	"github.com/Reskill-2022/hoarder/repositories"
 	"github.com/Reskill-2022/hoarder/server"
@@ -23,13 +24,18 @@ func main() {
 
 	svs := services.NewSet(conf)
 	cts := controllers.NewSet(svs)
+	jbs := jobs.NewSet(conf)
 
 	rcs, err := repositories.NewSet(ctx, conf)
 	if err != nil {
 		log.FromContext(ctx).Named("main").Fatal("failed to create repositories set", errors.ErrorLogFields(err)...)
 	}
 
-	if err := server.Start(ctx, cts, svs, rcs, conf.GetString(env.ServerPort)); err != nil {
+	if err := server.ScheduleJobs(ctx, jbs, svs, rcs); err != nil { // async
+		log.FromContext(ctx).Named("main").Fatal("failed to schedule cron jobs", errors.ErrorLogFields(err)...)
+	}
+
+	if err := server.Start(ctx, cts, svs, rcs, conf.GetString(env.ServerPort)); err != nil { // blocking
 		log.FromContext(ctx).Named("main").Fatal("failed to start HTTP server", errors.ErrorLogFields(err)...)
 	}
 }
