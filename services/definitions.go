@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"time"
 
 	"github.com/Reskill-2022/hoarder/models"
 	"github.com/Reskill-2022/hoarder/repositories"
@@ -28,6 +29,6 @@ type (
 	}
 
 	MoodleServiceInterface interface {
-		ExtractTransformLoadLogs(ctx context.Context, input LogsETLInput, repo repositories.MoodleRepositoryInterface) error
+		ListLogs(ctx context.Context, since *time.Time, lister repositories.MoodleRepositoryInterface) ([]*models.MoodleLogLine, error)
 	}
 )

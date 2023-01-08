@@ -2,19 +2,34 @@ package jobs
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/Reskill-2022/hoarder/config"
 	"github.com/Reskill-2022/hoarder/cron"
-	"github.com/Reskill-2022/hoarder/errors"
+	"github.com/Reskill-2022/hoarder/repositories"
+	"github.com/Reskill-2022/hoarder/services"
 )
 
 type MoodleJobs struct {
 	conf config.Config
 }
 
-func (m *MoodleJobs) ExtractTransformLoadLogs() cron.Job {
+func (m *MoodleJobs) ExtractTransformLoadLogs(service services.MoodleServiceInterface, repo repositories.MoodleRepositoryInterface) cron.Job {
 	return func(ctx context.Context) error {
-		return errors.New("not implemented", 500)
+		t := time.Now().UTC()
+
+		logLines, err := service.ListLogs(ctx, &t, repo)
+		if err != nil {
+			panic(err)
+		}
+
+		// list all log ids
+		for _, line := range logLines {
+			fmt.Println(line.ID)
+		}
+
+		return nil
 	}
 }
 
