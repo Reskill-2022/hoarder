@@ -27,5 +27,7 @@ type (
 		EventOccurred(ctx context.Context, input CalendlyEventInput, creator repositories.CalendlyEventCreator) error
 	}
 
-	MoodleServiceInterface interface{}
+	MoodleServiceInterface interface {
+		ExtractTransformLoadLogs(ctx context.Context, input LogsETLInput, repo repositories.MoodleRepositoryInterface) error
+	}
 )
