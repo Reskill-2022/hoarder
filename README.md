@@ -1,2 +1,2 @@
 # hoarder
-I collect stuff and I can't help it - A Slack App.
+Traffic Warden - Hoarder helps services talk to each other
