@@ -1,2 +1,2 @@
 # hoarder
-Traffic Warden - Hoarder helps services talk to each other
+Hoarder helps services talk to each other.
